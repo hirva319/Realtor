@@ -11,7 +11,8 @@ import {
   DollarSign,
   Home as HomeIcon,
   Search,
-  FileText
+  FileText,
+  Star
 } from 'lucide-react';
 
 const Home = () => {
@@ -52,10 +53,10 @@ const Home = () => {
   ];
 
   const stats = [
-    { value: '7', label: 'Home Buying Phases', icon: HomeIcon },
-    { value: '20+', label: 'Interactive Checklists', icon: ClipboardList },
+    { value: '8', label: 'Home Buying Phases', icon: HomeIcon },
+    { value: '100+', label: 'Checklist Items', icon: ClipboardList },
     { value: '5', label: 'Financial Calculators', icon: Calculator },
-    { value: '30+', label: 'Common Mistakes to Avoid', icon: AlertCircle },
+    { value: '25+', label: 'Terms Explained', icon: BookOpen },
   ];
 
   return (
@@ -65,16 +66,16 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
           <div className="text-center max-w-4xl mx-auto">
             <div className="inline-flex items-center bg-blue-500/30 rounded-full px-4 py-2 mb-6">
-              <Shield className="h-5 w-5 mr-2" />
-              <span className="text-sm font-medium">Your Money Protection Partner</span>
+              <Star className="h-5 w-5 mr-2" />
+              <span className="text-sm font-medium">Built for Texas Home Buyers</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
               Buy Your First Home
-              <span className="text-blue-200"> With Confidence</span>
+              <span className="text-blue-200"> in Texas</span>
             </h1>
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              Expert guidance designed to protect your money, maximize your leverage, 
-              and help you make informed decisions every step of the way.
+              Expert guidance designed for Texas first-time buyers. Protect your money, understand Texas-specific rules 
+              like the Option Period, and make informed decisions every step of the way.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
@@ -246,11 +247,11 @@ const Home = () => {
               Tools to Help You Decide
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Use our interactive calculators and checklists to make data-driven decisions.
+              Use our interactive calculators, checklists, and dictionary to make data-driven decisions.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-3 gap-8">
             <Link to="/calculators" className="group">
               <div className="card h-full border-2 border-transparent group-hover:border-blue-500">
                 <div className="flex items-start space-x-4">
@@ -283,6 +284,25 @@ const Home = () => {
                     </p>
                     <span className="inline-flex items-center text-green-600 font-medium">
                       View Checklists <ArrowRight className="ml-2 h-4 w-4" />
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </Link>
+
+            <Link to="/dictionary" className="group">
+              <div className="card h-full border-2 border-transparent group-hover:border-purple-500">
+                <div className="flex items-start space-x-4">
+                  <div className="bg-purple-100 p-4 rounded-xl group-hover:bg-purple-600 transition-colors duration-200">
+                    <BookOpen className="h-8 w-8 text-purple-600 group-hover:text-white transition-colors duration-200" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">Home Buying Dictionary</h3>
+                    <p className="text-gray-600 mb-4">
+                      Don't know what "earnest money" means? Learn all the terms in plain English.
+                    </p>
+                    <span className="inline-flex items-center text-purple-600 font-medium">
+                      Learn Terms <ArrowRight className="ml-2 h-4 w-4" />
                     </span>
                   </div>
                 </div>

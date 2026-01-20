@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Calculator, ClipboardList, AlertTriangle, Menu, X, DollarSign, MapPin } from 'lucide-react';
+import { Home, Calculator, ClipboardList, AlertTriangle, Menu, X, DollarSign, MapPin, BookOpen } from 'lucide-react';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,6 +13,7 @@ const Navbar = () => {
     { path: '/calculators', label: 'Calculators', icon: Calculator },
     { path: '/checklists', label: 'Checklists', icon: ClipboardList },
     { path: '/red-flags', label: 'Red Flags', icon: AlertTriangle },
+    { path: '/dictionary', label: 'Dictionary', icon: BookOpen },
   ];
 
   const isActive = (path) => location.pathname === path;
