@@ -1,6 +1,6 @@
-# HomeBuyer Pro - First-Time Home Buyer Guide
+# HomeBuyer Pro - Texas Home Buyer Guide
 
-A comprehensive web application designed to help first-time home buyers make informed, money-protecting decisions throughout the home buying process.
+A comprehensive web application designed to help Texas home buyers make informed, money-protecting decisions throughout the home buying process.
 
 ## Features
 

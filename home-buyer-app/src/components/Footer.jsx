@@ -49,7 +49,7 @@ const Footer = () => {
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
           <p className="flex items-center justify-center gap-1">
-            Made with <Heart className="h-4 w-4 text-red-500" /> for first-time Texas home buyers
+            Made with <Heart className="h-4 w-4 text-red-500" /> for Texas home buyers
           </p>
           <p className="mt-2">&copy; {new Date().getFullYear()} HomeBuyer Pro. All rights reserved.</p>
         </div>

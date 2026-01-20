@@ -74,7 +74,7 @@ const Home = () => {
               <span className="text-blue-200"> in Texas</span>
             </h1>
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              Expert guidance designed for Texas first-time buyers. Protect your money, understand Texas-specific rules 
+              Expert guidance designed for Texas home buyers. Protect your money, understand Texas-specific rules 
               like the Option Period, and make informed decisions every step of the way.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -206,7 +206,7 @@ const Home = () => {
                 Where Buyers Lose Money
               </h2>
               <p className="text-orange-100 text-lg">
-                Learn about the most common and costly mistakes that first-time buyers make.
+                Learn about the most common and costly mistakes that home buyers make.
               </p>
             </div>
             <div className="lg:w-2/3">

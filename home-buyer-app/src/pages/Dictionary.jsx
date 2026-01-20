@@ -121,7 +121,7 @@ const Dictionary = () => {
 - 20% down avoids PMI but isn't always the best use of money
 - Don't drain your emergency fund for a bigger down payment
 
-**First-time buyer programs in Texas:**
+**Buyer assistance programs in Texas:**
 - Texas State Affordable Housing Corporation (TSAHC) - down payment assistance
 - Texas Department of Housing - My First Texas Home program
 - Many local programs available`,
@@ -185,7 +185,7 @@ const Dictionary = () => {
       term: 'Seller Concessions',
       category: 'money',
       shortDef: 'Money the seller agrees to pay toward your closing costs or other expenses.',
-      fullDef: `Seller concessions are contributions from the seller to help cover your costs. This is a powerful negotiation tool many first-time buyers don't know about!
+      fullDef: `Seller concessions are contributions from the seller to help cover your costs. This is a powerful negotiation tool many buyers don't know about!
 
 **What sellers can pay for:**
 - Your closing costs
@@ -607,7 +607,7 @@ In Texas, most due diligence happens during your Option Period. This is your pro
 
 **Choosing a buyer's agent:**
 - Interview multiple agents
-- Ask about their experience with first-time buyers
+- Ask about their experience and track record
 - Ask how they're compensated
 - Get everything in writing
 
