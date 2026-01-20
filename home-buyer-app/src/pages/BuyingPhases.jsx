@@ -92,7 +92,7 @@ Lender types to consider:
 • Online lenders (lower overhead = potentially lower rates)`,
         },
         {
-          title: 'Texas First-Time Buyer Programs',
+          title: 'Texas Buyer Assistance Programs',
           content: `Don't miss these Texas programs:
 
 **TSAHC (Texas State Affordable Housing Corporation):**
@@ -103,14 +103,14 @@ Lender types to consider:
 **My First Texas Home:**
 • Down payment/closing cost assistance
 • 30-year fixed rate mortgages
-• For first-time buyers and veterans
+• For qualifying buyers and veterans
 
 **Local Programs:**
 • Many Texas cities have their own assistance programs
 • Ask your lender what programs you qualify for!`,
         },
       ],
-      texasInfo: 'Texas has some of the best first-time buyer programs in the country. TSAHC and My First Texas Home can provide significant down payment assistance - don\'t skip these!',
+      texasInfo: 'Texas has excellent buyer assistance programs. TSAHC and My First Texas Home can provide significant down payment assistance for qualifying buyers - don\'t skip these!',
       redFlag: 'Don\'t house hunt without pre-approval. You\'ll waste time looking at homes you can\'t afford and sellers won\'t take you seriously.',
       moneyProtection: 'Shopping lenders is one of the easiest ways to save thousands. Don\'t just go with the first lender you talk to.',
     },

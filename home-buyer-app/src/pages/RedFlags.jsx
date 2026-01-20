@@ -258,7 +258,7 @@ const RedFlags = () => {
           </div>
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Red Flags & Common Mistakes</h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Learn about the most common and costly mistakes that first-time home buyers make, 
+            Learn about the most common and costly mistakes that home buyers make, 
             and how to protect yourself.
           </p>
         </div>
