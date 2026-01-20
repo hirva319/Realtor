@@ -291,17 +291,17 @@ const Home = () => {
             </Link>
 
             <Link to="/dictionary" className="group">
-              <div className="card h-full border-2 border-transparent group-hover:border-purple-500">
+              <div className="card h-full border-2 border-transparent group-hover:border-orange-500">
                 <div className="flex items-start space-x-4">
-                  <div className="bg-purple-100 p-4 rounded-xl group-hover:bg-purple-600 transition-colors duration-200">
-                    <BookOpen className="h-8 w-8 text-purple-600 group-hover:text-white transition-colors duration-200" />
+                  <div className="bg-orange-100 p-4 rounded-xl group-hover:bg-orange-600 transition-colors duration-200">
+                    <BookOpen className="h-8 w-8 text-orange-600 group-hover:text-white transition-colors duration-200" />
                   </div>
                   <div>
                     <h3 className="text-xl font-semibold text-gray-900 mb-2">Home Buying Dictionary</h3>
                     <p className="text-gray-600 mb-4">
                       Don't know what "earnest money" means? Learn all the terms in plain English.
                     </p>
-                    <span className="inline-flex items-center text-purple-600 font-medium">
+                    <span className="inline-flex items-center text-orange-600 font-medium">
                       Learn Terms <ArrowRight className="ml-2 h-4 w-4" />
                     </span>
                   </div>
