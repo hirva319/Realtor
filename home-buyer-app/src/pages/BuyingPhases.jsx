@@ -22,6 +22,24 @@ import {
   Eye
 } from 'lucide-react';
 
+// Helper function to render text with bold formatting
+const FormattedText = ({ text }) => {
+  // Split by **text** pattern and render bold sections
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  
+  return (
+    <>
+      {parts.map((part, index) => {
+        if (part.startsWith('**') && part.endsWith('**')) {
+          // Remove ** and render as bold
+          return <strong key={index} className="font-semibold text-gray-800">{part.slice(2, -2)}</strong>;
+        }
+        return <span key={index}>{part}</span>;
+      })}
+    </>
+  );
+};
+
 const BuyingPhases = () => {
   const [expandedPhase, setExpandedPhase] = useState(0);
 
@@ -955,7 +973,9 @@ Verify wire instructions by CALLING your title company directly. Hackers commonl
                             {phase.keyPoints.map((point, pointIndex) => (
                               <div key={pointIndex} className="bg-white rounded-lg p-4 shadow-sm">
                                 <h4 className="font-semibold text-gray-900 mb-2">{point.title}</h4>
-                                <div className="text-gray-600 text-sm whitespace-pre-line">{point.content}</div>
+                                <div className="text-gray-600 text-sm whitespace-pre-line">
+                                  <FormattedText text={point.content} />
+                                </div>
                               </div>
                             ))}
                           </div>

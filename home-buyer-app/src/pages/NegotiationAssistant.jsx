@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   MessageSquare, 
   Copy, 
@@ -16,7 +16,14 @@ import {
   ChevronUp,
   Sparkles,
   Target,
-  Shield
+  Shield,
+  Key,
+  Send,
+  Loader2,
+  Settings,
+  X,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 
 const NegotiationAssistant = () => {
@@ -43,6 +50,79 @@ const NegotiationAssistant = () => {
   const [generatedPrompt, setGeneratedPrompt] = useState('');
   const [copied, setCopied] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
+  
+  // API Integration States
+  const [apiKey, setApiKey] = useState('');
+  const [showApiKeyModal, setShowApiKeyModal] = useState(false);
+  const [showApiKey, setShowApiKey] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [aiResponse, setAiResponse] = useState('');
+  const [apiError, setApiError] = useState('');
+  const [selectedModel, setSelectedModel] = useState('gpt-4o-mini');
+
+  // Load API key from localStorage on mount
+  useEffect(() => {
+    const savedKey = localStorage.getItem('openai_api_key');
+    if (savedKey) {
+      setApiKey(savedKey);
+    }
+  }, []);
+
+  // Save API key to localStorage
+  const saveApiKey = (key) => {
+    if (key) {
+      localStorage.setItem('openai_api_key', key);
+    } else {
+      localStorage.removeItem('openai_api_key');
+    }
+    setApiKey(key);
+    setShowApiKeyModal(false);
+  };
+
+  // Call OpenAI API
+  const callOpenAI = async (prompt) => {
+    setIsLoading(true);
+    setApiError('');
+    setAiResponse('');
+
+    try {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model: selectedModel,
+          messages: [
+            {
+              role: 'system',
+              content: 'You are an expert buyer\'s real estate agent in Texas, specializing in protecting buyers\' money and maximizing negotiation leverage. Provide detailed, actionable advice with specific numbers and recommendations. Format your response with clear headers and bullet points for readability.'
+            },
+            {
+              role: 'user',
+              content: prompt
+            }
+          ],
+          temperature: 0.7,
+          max_tokens: 4000,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error?.message || 'API request failed');
+      }
+
+      const data = await response.json();
+      setAiResponse(data.choices[0].message.content);
+    } catch (error) {
+      console.error('OpenAI API Error:', error);
+      setApiError(error.message || 'Failed to get AI response. Please check your API key and try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -138,6 +218,14 @@ Please write out the specific terms you'd recommend for my offer, including:
 Remember: Your primary goal is to PROTECT MY MONEY and help me avoid overpaying or buying a problem property. Be direct about any concerns and don't sugarcoat risks.`;
 
     setGeneratedPrompt(prompt);
+    return prompt;
+  };
+
+  const handleGenerateAndAnalyze = async () => {
+    const prompt = generatePrompt();
+    if (apiKey) {
+      await callOpenAI(prompt);
+    }
   };
 
   const copyToClipboard = async () => {
