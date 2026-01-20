@@ -7,6 +7,7 @@ import BuyingPhases from './pages/BuyingPhases';
 import Calculators from './pages/Calculators';
 import Checklists from './pages/Checklists';
 import RedFlags from './pages/RedFlags';
+import Dictionary from './pages/Dictionary';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/calculators" element={<Calculators />} />
             <Route path="/checklists" element={<Checklists />} />
             <Route path="/red-flags" element={<RedFlags />} />
+            <Route path="/dictionary" element={<Dictionary />} />
           </Routes>
         </main>
         <Footer />
