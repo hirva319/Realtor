@@ -583,21 +583,94 @@ Remember: Your primary goal is to PROTECT MY MONEY and help me avoid overpaying 
                   )}
                 </div>
 
-                {/* Generate Button */}
-                <button
-                  onClick={generatePrompt}
-                  disabled={!formData.address || !formData.city || !formData.listingPrice || !formData.daysOnMarket}
-                  className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-purple-700 hover:to-indigo-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-                >
-                  <Sparkles className="h-5 w-5 mr-2" />
-                  Generate AI Research Prompt
-                </button>
+                {/* Generate Buttons */}
+                <div className="space-y-3">
+                  {apiKey && (
+                    <button
+                      onClick={handleGenerateAndAnalyze}
+                      disabled={!formData.address || !formData.city || !formData.listingPrice || !formData.daysOnMarket || isLoading}
+                      className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-green-700 hover:to-emerald-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                    >
+                      {isLoading ? (
+                        <>
+                          <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                          Analyzing Property...
+                        </>
+                      ) : (
+                        <>
+                          <Send className="h-5 w-5 mr-2" />
+                          Get AI Analysis Now
+                        </>
+                      )}
+                    </button>
+                  )}
+                  
+                  <button
+                    onClick={generatePrompt}
+                    disabled={!formData.address || !formData.city || !formData.listingPrice || !formData.daysOnMarket}
+                    className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-4 rounded-lg font-semibold hover:from-purple-700 hover:to-indigo-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                  >
+                    <Sparkles className="h-5 w-5 mr-2" />
+                    {apiKey ? 'Generate Prompt Only (Copy/Paste)' : 'Generate AI Research Prompt'}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
 
           {/* Sidebar */}
           <div className="space-y-6">
+            {/* API Key Configuration */}
+            <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-6">
+              <h3 className="font-semibold text-green-900 mb-3 flex items-center">
+                <Key className="h-5 w-5 mr-2" />
+                Direct AI Analysis
+              </h3>
+              {apiKey ? (
+                <div className="space-y-3">
+                  <div className="flex items-center text-green-700 text-sm">
+                    <Check className="h-4 w-4 mr-2" />
+                    API Key configured
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-green-800 mb-1">Model</label>
+                    <select
+                      value={selectedModel}
+                      onChange={(e) => setSelectedModel(e.target.value)}
+                      className="w-full px-3 py-2 border border-green-300 rounded-lg text-sm bg-white"
+                    >
+                      <option value="gpt-4o-mini">GPT-4o Mini (Fast & Cheap)</option>
+                      <option value="gpt-4o">GPT-4o (Best Quality)</option>
+                      <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                    </select>
+                  </div>
+                  <button
+                    onClick={() => setShowApiKeyModal(true)}
+                    className="text-sm text-green-700 hover:text-green-800 flex items-center"
+                  >
+                    <Settings className="h-4 w-4 mr-1" />
+                    Change API Key
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  <p className="text-sm text-green-700">
+                    Add your OpenAI API key to get analysis directly in the app without copy/paste.
+                  </p>
+                  <button
+                    onClick={() => setShowApiKeyModal(true)}
+                    className="w-full bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors flex items-center justify-center"
+                  >
+                    <Key className="h-4 w-4 mr-2" />
+                    Add API Key
+                  </button>
+                  <p className="text-xs text-green-600">
+                    Your key is stored locally in your browser only.
+                  </p>
+                </div>
+              )}
+            </div>
+
             {/* Research Links */}
             <div className="bg-white rounded-xl shadow-md p-6">
               <h3 className="font-semibold text-gray-900 mb-4 flex items-center">
@@ -653,6 +726,148 @@ Remember: Your primary goal is to PROTECT MY MONEY and help me avoid overpaying 
             </div>
           </div>
         </div>
+
+        {/* API Key Modal */}
+        {showApiKeyModal && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-bold text-gray-900 flex items-center">
+                  <Key className="h-5 w-5 mr-2 text-green-600" />
+                  OpenAI API Key
+                </h3>
+                <button
+                  onClick={() => setShowApiKeyModal(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+              
+              <p className="text-sm text-gray-600 mb-4">
+                Enter your OpenAI API key to get AI analysis directly in the app. 
+                Your key is stored only in your browser's local storage.
+              </p>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">API Key</label>
+                  <div className="relative">
+                    <input
+                      type={showApiKey ? 'text' : 'password'}
+                      value={apiKey}
+                      onChange={(e) => setApiKey(e.target.value)}
+                      className="input-field pr-10"
+                      placeholder="sk-..."
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowApiKey(!showApiKey)}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    >
+                      {showApiKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                  <p className="text-xs text-yellow-700">
+                    <strong>Note:</strong> API calls cost money (typically $0.01-0.10 per analysis with GPT-4o-mini). 
+                    Get your API key at <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" className="underline">platform.openai.com</a>
+                  </p>
+                </div>
+
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => saveApiKey(apiKey)}
+                    className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition-colors"
+                  >
+                    Save Key
+                  </button>
+                  {apiKey && (
+                    <button
+                      onClick={() => saveApiKey('')}
+                      className="px-4 py-2 border border-red-300 text-red-600 rounded-lg font-medium hover:bg-red-50 transition-colors"
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* AI Response */}
+        {(aiResponse || apiError || isLoading) && (
+          <div className="mt-8 bg-white rounded-xl shadow-md p-6">
+            <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+              <Sparkles className="h-5 w-5 mr-2 text-green-600" />
+              AI Negotiation Analysis
+            </h2>
+
+            {isLoading && (
+              <div className="flex items-center justify-center py-12">
+                <div className="text-center">
+                  <Loader2 className="h-10 w-10 text-green-600 animate-spin mx-auto mb-4" />
+                  <p className="text-gray-600">Analyzing property and generating negotiation strategy...</p>
+                  <p className="text-sm text-gray-500 mt-2">This may take 15-30 seconds</p>
+                </div>
+              </div>
+            )}
+
+            {apiError && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                <div className="flex items-start space-x-3">
+                  <AlertTriangle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="font-semibold text-red-800">Error</h4>
+                    <p className="text-red-700 text-sm mt-1">{apiError}</p>
+                    <button
+                      onClick={() => setShowApiKeyModal(true)}
+                      className="mt-2 text-sm text-red-600 hover:text-red-800 underline"
+                    >
+                      Check API Key Settings
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {aiResponse && (
+              <div className="prose prose-sm max-w-none">
+                <div className="bg-gray-50 rounded-lg p-6 whitespace-pre-wrap text-gray-800">
+                  {aiResponse}
+                </div>
+                <div className="mt-4 flex gap-3">
+                  <button
+                    onClick={async () => {
+                      await navigator.clipboard.writeText(aiResponse);
+                      setCopied(true);
+                      setTimeout(() => setCopied(false), 2000);
+                    }}
+                    className={`flex items-center px-4 py-2 rounded-lg font-medium transition-colors ${
+                      copied 
+                        ? 'bg-green-100 text-green-700' 
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    {copied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
+                    {copied ? 'Copied!' : 'Copy Analysis'}
+                  </button>
+                  <button
+                    onClick={() => handleGenerateAndAnalyze()}
+                    disabled={isLoading}
+                    className="flex items-center px-4 py-2 bg-green-100 text-green-700 rounded-lg font-medium hover:bg-green-200 transition-colors disabled:opacity-50"
+                  >
+                    <Send className="h-4 w-4 mr-2" />
+                    Regenerate
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Generated Prompt */}
         {generatedPrompt && (
