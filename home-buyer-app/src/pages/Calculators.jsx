@@ -29,8 +29,8 @@ const Calculators = () => {
       downPayment: 80000,
       interestRate: 7,
       loanTerm: 30,
-      propertyTax: 1.2,
-      insurance: 1500,
+      propertyTax: 2.0,
+      insurance: 1800,
       hoa: 0,
     });
 
@@ -38,64 +38,73 @@ const Calculators = () => {
     const monthlyRate = inputs.interestRate / 100 / 12;
     const numPayments = inputs.loanTerm * 12;
     
-    const monthlyPrincipalInterest = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1);
+    const monthlyPrincipalInterest = loanAmount > 0 && monthlyRate > 0 
+      ? loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1)
+      : 0;
     const monthlyPropertyTax = (inputs.homePrice * (inputs.propertyTax / 100)) / 12;
     const monthlyInsurance = inputs.insurance / 12;
     const pmi = inputs.downPayment / inputs.homePrice < 0.20 ? (loanAmount * 0.01) / 12 : 0;
     const totalMonthly = monthlyPrincipalInterest + monthlyPropertyTax + monthlyInsurance + pmi + inputs.hoa;
+
+    const handleChange = (field, value) => {
+      setInputs(prev => ({ ...prev, [field]: value }));
+    };
 
     return (
       <div className="grid lg:grid-cols-2 gap-8">
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Home Price</label>
-            <input
-              type="range"
-              min="100000"
-              max="2000000"
-              step="10000"
-              value={inputs.homePrice}
-              onChange={(e) => setInputs({...inputs, homePrice: parseInt(e.target.value)})}
-              className="w-full"
-            />
-            <div className="text-right text-lg font-semibold text-blue-600">{formatCurrency(inputs.homePrice)}</div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Down Payment</label>
-            <input
-              type="range"
-              min="0"
-              max={inputs.homePrice * 0.5}
-              step="5000"
-              value={inputs.downPayment}
-              onChange={(e) => setInputs({...inputs, downPayment: parseInt(e.target.value)})}
-              className="w-full"
-            />
-            <div className="text-right text-lg font-semibold text-blue-600">
-              {formatCurrency(inputs.downPayment)} ({((inputs.downPayment / inputs.homePrice) * 100).toFixed(1)}%)
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="number"
+                value={inputs.homePrice}
+                onChange={(e) => handleChange('homePrice', parseInt(e.target.value) || 0)}
+                className="input-field pl-10"
+                placeholder="400000"
+              />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Interest Rate</label>
-            <input
-              type="range"
-              min="3"
-              max="12"
-              step="0.125"
-              value={inputs.interestRate}
-              onChange={(e) => setInputs({...inputs, interestRate: parseFloat(e.target.value)})}
-              className="w-full"
-            />
-            <div className="text-right text-lg font-semibold text-blue-600">{inputs.interestRate}%</div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Down Payment</label>
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="number"
+                value={inputs.downPayment}
+                onChange={(e) => handleChange('downPayment', parseInt(e.target.value) || 0)}
+                className="input-field pl-10"
+                placeholder="80000"
+              />
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              {inputs.homePrice > 0 ? `${((inputs.downPayment / inputs.homePrice) * 100).toFixed(1)}% of home price` : ''}
+              {inputs.downPayment / inputs.homePrice < 0.20 && inputs.homePrice > 0 ? ' (PMI required)' : ''}
+            </p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Interest Rate (%)</label>
+            <div className="relative">
+              <input
+                type="number"
+                step="0.125"
+                value={inputs.interestRate}
+                onChange={(e) => handleChange('interestRate', parseFloat(e.target.value) || 0)}
+                className="input-field pr-8"
+                placeholder="7"
+              />
+              <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">%</span>
+            </div>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Loan Term</label>
             <select
               value={inputs.loanTerm}
-              onChange={(e) => setInputs({...inputs, loanTerm: parseInt(e.target.value)})}
+              onChange={(e) => handleChange('loanTerm', parseInt(e.target.value))}
               className="input-field"
             >
               <option value={15}>15 years</option>
@@ -107,33 +116,45 @@ const Calculators = () => {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Property Tax Rate (%)</label>
-              <input
-                type="number"
-                step="0.1"
-                value={inputs.propertyTax}
-                onChange={(e) => setInputs({...inputs, propertyTax: parseFloat(e.target.value)})}
-                className="input-field"
-              />
+              <div className="relative">
+                <input
+                  type="number"
+                  step="0.1"
+                  value={inputs.propertyTax}
+                  onChange={(e) => handleChange('propertyTax', parseFloat(e.target.value) || 0)}
+                  className="input-field pr-8"
+                  placeholder="2.0"
+                />
+                <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">%</span>
+              </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Annual Insurance ($)</label>
-              <input
-                type="number"
-                value={inputs.insurance}
-                onChange={(e) => setInputs({...inputs, insurance: parseInt(e.target.value)})}
-                className="input-field"
-              />
+              <label className="block text-sm font-medium text-gray-700 mb-2">Annual Insurance</label>
+              <div className="relative">
+                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <input
+                  type="number"
+                  value={inputs.insurance}
+                  onChange={(e) => handleChange('insurance', parseInt(e.target.value) || 0)}
+                  className="input-field pl-10"
+                  placeholder="1800"
+                />
+              </div>
             </div>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Monthly HOA</label>
-            <input
-              type="number"
-              value={inputs.hoa}
-              onChange={(e) => setInputs({...inputs, hoa: parseInt(e.target.value) || 0})}
-              className="input-field"
-            />
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="number"
+                value={inputs.hoa}
+                onChange={(e) => handleChange('hoa', parseInt(e.target.value) || 0)}
+                className="input-field pl-10"
+                placeholder="0"
+              />
+            </div>
           </div>
         </div>
 
@@ -206,66 +227,74 @@ const Calculators = () => {
     const monthlyTaxInsurance = 400; // Rough estimate
     const monthlyPIAvailable = availableForHousing - monthlyTaxInsurance;
     
-    const loanAmount = monthlyPIAvailable * (Math.pow(1 + monthlyRate, numPayments) - 1) / (monthlyRate * Math.pow(1 + monthlyRate, numPayments));
+    const loanAmount = monthlyPIAvailable > 0 && monthlyRate > 0
+      ? monthlyPIAvailable * (Math.pow(1 + monthlyRate, numPayments) - 1) / (monthlyRate * Math.pow(1 + monthlyRate, numPayments))
+      : 0;
     const affordableHome = loanAmount + inputs.downPayment;
+
+    const handleChange = (field, value) => {
+      setInputs(prev => ({ ...prev, [field]: value }));
+    };
 
     return (
       <div className="grid lg:grid-cols-2 gap-8">
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Annual Gross Income</label>
-            <input
-              type="range"
-              min="30000"
-              max="500000"
-              step="5000"
-              value={inputs.annualIncome}
-              onChange={(e) => setInputs({...inputs, annualIncome: parseInt(e.target.value)})}
-              className="w-full"
-            />
-            <div className="text-right text-lg font-semibold text-green-600">{formatCurrency(inputs.annualIncome)}</div>
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="number"
+                value={inputs.annualIncome}
+                onChange={(e) => handleChange('annualIncome', parseInt(e.target.value) || 0)}
+                className="input-field pl-10"
+                placeholder="100000"
+              />
+            </div>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Monthly Debt Payments</label>
-            <input
-              type="range"
-              min="0"
-              max="5000"
-              step="50"
-              value={inputs.monthlyDebts}
-              onChange={(e) => setInputs({...inputs, monthlyDebts: parseInt(e.target.value)})}
-              className="w-full"
-            />
-            <div className="text-right text-lg font-semibold text-green-600">{formatCurrency(inputs.monthlyDebts)}/mo</div>
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="number"
+                value={inputs.monthlyDebts}
+                onChange={(e) => handleChange('monthlyDebts', parseInt(e.target.value) || 0)}
+                className="input-field pl-10"
+                placeholder="500"
+              />
+            </div>
+            <p className="text-xs text-gray-500 mt-1">Car, student loans, credit cards, etc.</p>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Available Down Payment</label>
-            <input
-              type="range"
-              min="0"
-              max="500000"
-              step="5000"
-              value={inputs.downPayment}
-              onChange={(e) => setInputs({...inputs, downPayment: parseInt(e.target.value)})}
-              className="w-full"
-            />
-            <div className="text-right text-lg font-semibold text-green-600">{formatCurrency(inputs.downPayment)}</div>
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="number"
+                value={inputs.downPayment}
+                onChange={(e) => handleChange('downPayment', parseInt(e.target.value) || 0)}
+                className="input-field pl-10"
+                placeholder="60000"
+              />
+            </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Interest Rate</label>
-            <input
-              type="range"
-              min="3"
-              max="12"
-              step="0.125"
-              value={inputs.interestRate}
-              onChange={(e) => setInputs({...inputs, interestRate: parseFloat(e.target.value)})}
-              className="w-full"
-            />
-            <div className="text-right text-lg font-semibold text-green-600">{inputs.interestRate}%</div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Interest Rate (%)</label>
+            <div className="relative">
+              <input
+                type="number"
+                step="0.125"
+                value={inputs.interestRate}
+                onChange={(e) => handleChange('interestRate', parseFloat(e.target.value) || 0)}
+                className="input-field pr-8"
+                placeholder="7"
+              />
+              <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">%</span>
+            </div>
           </div>
         </div>
 
@@ -319,11 +348,13 @@ const Calculators = () => {
     const loanAmount = inputs.homePrice - inputs.downPayment;
     const monthlyRate = inputs.interestRate / 100 / 12;
     const numPayments = 360;
-    const monthlyMortgage = loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1);
+    const monthlyMortgage = loanAmount > 0 && monthlyRate > 0
+      ? loanAmount * (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / (Math.pow(1 + monthlyRate, numPayments) - 1)
+      : 0;
     
     // Additional costs
-    const monthlyPropertyTax = (inputs.homePrice * 0.012) / 12;
-    const monthlyInsurance = 125;
+    const monthlyPropertyTax = (inputs.homePrice * 0.02) / 12;
+    const monthlyInsurance = 150;
     const monthlyMaintenance = (inputs.homePrice * 0.01) / 12;
     const totalMonthlyCost = monthlyMortgage + monthlyPropertyTax + monthlyInsurance + monthlyMaintenance;
     
@@ -338,88 +369,92 @@ const Calculators = () => {
     // Calculate equity built
     const monthsPaid = inputs.yearsToStay * 12;
     let remainingBalance = loanAmount;
-    for (let i = 0; i < monthsPaid; i++) {
+    for (let i = 0; i < monthsPaid && remainingBalance > 0; i++) {
       const interestPayment = remainingBalance * monthlyRate;
       const principalPayment = monthlyMortgage - interestPayment;
       remainingBalance -= principalPayment;
     }
-    const equityBuilt = futureHomeValue - remainingBalance;
+    const equityBuilt = futureHomeValue - Math.max(0, remainingBalance);
     
     // Total cost of buying
     const totalBuyingCosts = (totalMonthlyCost * monthsPaid) + inputs.downPayment;
     const netCostOfBuying = totalBuyingCosts - (equityBuilt - inputs.downPayment);
+
+    const handleChange = (field, value) => {
+      setInputs(prev => ({ ...prev, [field]: value }));
+    };
 
     return (
       <div className="grid lg:grid-cols-2 gap-8">
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Current Monthly Rent</label>
-            <input
-              type="range"
-              min="500"
-              max="5000"
-              step="50"
-              value={inputs.monthlyRent}
-              onChange={(e) => setInputs({...inputs, monthlyRent: parseInt(e.target.value)})}
-              className="w-full"
-            />
-            <div className="text-right text-lg font-semibold text-purple-600">{formatCurrency(inputs.monthlyRent)}/mo</div>
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="number"
+                value={inputs.monthlyRent}
+                onChange={(e) => handleChange('monthlyRent', parseInt(e.target.value) || 0)}
+                className="input-field pl-10"
+                placeholder="2000"
+              />
+            </div>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Home Purchase Price</label>
-            <input
-              type="range"
-              min="100000"
-              max="1500000"
-              step="10000"
-              value={inputs.homePrice}
-              onChange={(e) => setInputs({...inputs, homePrice: parseInt(e.target.value)})}
-              className="w-full"
-            />
-            <div className="text-right text-lg font-semibold text-purple-600">{formatCurrency(inputs.homePrice)}</div>
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="number"
+                value={inputs.homePrice}
+                onChange={(e) => handleChange('homePrice', parseInt(e.target.value) || 0)}
+                className="input-field pl-10"
+                placeholder="400000"
+              />
+            </div>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Down Payment</label>
-            <input
-              type="range"
-              min="0"
-              max={inputs.homePrice * 0.5}
-              step="5000"
-              value={inputs.downPayment}
-              onChange={(e) => setInputs({...inputs, downPayment: parseInt(e.target.value)})}
-              className="w-full"
-            />
-            <div className="text-right text-lg font-semibold text-purple-600">{formatCurrency(inputs.downPayment)}</div>
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="number"
+                value={inputs.downPayment}
+                onChange={(e) => handleChange('downPayment', parseInt(e.target.value) || 0)}
+                className="input-field pl-10"
+                placeholder="80000"
+              />
+            </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Home Appreciation Rate</label>
-            <input
-              type="range"
-              min="0"
-              max="10"
-              step="0.5"
-              value={inputs.appreciation}
-              onChange={(e) => setInputs({...inputs, appreciation: parseFloat(e.target.value)})}
-              className="w-full"
-            />
-            <div className="text-right text-lg font-semibold text-purple-600">{inputs.appreciation}%/year</div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Home Appreciation Rate (%/year)</label>
+            <div className="relative">
+              <input
+                type="number"
+                step="0.5"
+                value={inputs.appreciation}
+                onChange={(e) => handleChange('appreciation', parseFloat(e.target.value) || 0)}
+                className="input-field pr-8"
+                placeholder="3"
+              />
+              <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">%</span>
+            </div>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Years You Plan to Stay</label>
             <input
-              type="range"
+              type="number"
+              value={inputs.yearsToStay}
+              onChange={(e) => handleChange('yearsToStay', parseInt(e.target.value) || 1)}
+              className="input-field"
+              placeholder="7"
               min="1"
               max="30"
-              step="1"
-              value={inputs.yearsToStay}
-              onChange={(e) => setInputs({...inputs, yearsToStay: parseInt(e.target.value)})}
-              className="w-full"
             />
-            <div className="text-right text-lg font-semibold text-purple-600">{inputs.yearsToStay} years</div>
           </div>
         </div>
 
@@ -495,71 +530,103 @@ const Calculators = () => {
     const sixMonthFund = totalMonthlyExpenses * 6;
     const fundCoverage = inputs.currentSavings / totalMonthlyExpenses;
 
+    const handleChange = (field, value) => {
+      setInputs(prev => ({ ...prev, [field]: value }));
+    };
+
     return (
       <div className="grid lg:grid-cols-2 gap-8">
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Monthly Mortgage/Rent</label>
-            <input
-              type="number"
-              value={inputs.monthlyMortgage}
-              onChange={(e) => setInputs({...inputs, monthlyMortgage: parseInt(e.target.value) || 0})}
-              className="input-field"
-            />
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="number"
+                value={inputs.monthlyMortgage}
+                onChange={(e) => handleChange('monthlyMortgage', parseInt(e.target.value) || 0)}
+                className="input-field pl-10"
+                placeholder="2500"
+              />
+            </div>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Monthly Utilities</label>
-            <input
-              type="number"
-              value={inputs.monthlyUtilities}
-              onChange={(e) => setInputs({...inputs, monthlyUtilities: parseInt(e.target.value) || 0})}
-              className="input-field"
-            />
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="number"
+                value={inputs.monthlyUtilities}
+                onChange={(e) => handleChange('monthlyUtilities', parseInt(e.target.value) || 0)}
+                className="input-field pl-10"
+                placeholder="300"
+              />
+            </div>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Monthly Food/Groceries</label>
-            <input
-              type="number"
-              value={inputs.monthlyFood}
-              onChange={(e) => setInputs({...inputs, monthlyFood: parseInt(e.target.value) || 0})}
-              className="input-field"
-            />
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="number"
+                value={inputs.monthlyFood}
+                onChange={(e) => handleChange('monthlyFood', parseInt(e.target.value) || 0)}
+                className="input-field pl-10"
+                placeholder="600"
+              />
+            </div>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Monthly Transportation</label>
-            <input
-              type="number"
-              value={inputs.monthlyTransport}
-              onChange={(e) => setInputs({...inputs, monthlyTransport: parseInt(e.target.value) || 0})}
-              className="input-field"
-            />
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="number"
+                value={inputs.monthlyTransport}
+                onChange={(e) => handleChange('monthlyTransport', parseInt(e.target.value) || 0)}
+                className="input-field pl-10"
+                placeholder="400"
+              />
+            </div>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Monthly Insurance (health, auto)</label>
-            <input
-              type="number"
-              value={inputs.monthlyInsurance}
-              onChange={(e) => setInputs({...inputs, monthlyInsurance: parseInt(e.target.value) || 0})}
-              className="input-field"
-            />
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="number"
+                value={inputs.monthlyInsurance}
+                onChange={(e) => handleChange('monthlyInsurance', parseInt(e.target.value) || 0)}
+                className="input-field pl-10"
+                placeholder="300"
+              />
+            </div>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Other Monthly Expenses</label>
-            <input
-              type="number"
-              value={inputs.monthlyOther}
-              onChange={(e) => setInputs({...inputs, monthlyOther: parseInt(e.target.value) || 0})}
-              className="input-field"
-            />
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="number"
+                value={inputs.monthlyOther}
+                onChange={(e) => handleChange('monthlyOther', parseInt(e.target.value) || 0)}
+                className="input-field pl-10"
+                placeholder="500"
+              />
+            </div>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Current Savings</label>
-            <input
-              type="number"
-              value={inputs.currentSavings}
-              onChange={(e) => setInputs({...inputs, currentSavings: parseInt(e.target.value) || 0})}
-              className="input-field"
-            />
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="number"
+                value={inputs.currentSavings}
+                onChange={(e) => handleChange('currentSavings', parseInt(e.target.value) || 0)}
+                className="input-field pl-10"
+                placeholder="30000"
+              />
+            </div>
           </div>
         </div>
 
@@ -628,50 +695,58 @@ const Calculators = () => {
     const appraisalFee = 500;
     const inspectionFee = 500;
     const transferTax = inputs.homePrice * stateTaxRates[inputs.state];
-    const prepaidTaxes = (inputs.homePrice * 0.012) / 12 * 3;
-    const prepaidInsurance = 1500;
+    const prepaidTaxes = (inputs.homePrice * 0.02) / 12 * 3;
+    const prepaidInsurance = 1800;
     const attorneyFees = 1500;
     
     const totalClosingCosts = lenderFees + titleInsurance + escrowFees + appraisalFee + 
       inspectionFee + transferTax + prepaidTaxes + prepaidInsurance + attorneyFees;
     const percentOfPrice = (totalClosingCosts / inputs.homePrice) * 100;
 
+    const handleChange = (field, value) => {
+      setInputs(prev => ({ ...prev, [field]: value }));
+    };
+
     return (
       <div className="grid lg:grid-cols-2 gap-8">
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Home Price</label>
-            <input
-              type="range"
-              min="100000"
-              max="1500000"
-              step="10000"
-              value={inputs.homePrice}
-              onChange={(e) => setInputs({...inputs, homePrice: parseInt(e.target.value), loanAmount: parseInt(e.target.value) * 0.8})}
-              className="w-full"
-            />
-            <div className="text-right text-lg font-semibold text-teal-600">{formatCurrency(inputs.homePrice)}</div>
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="number"
+                value={inputs.homePrice}
+                onChange={(e) => {
+                  const price = parseInt(e.target.value) || 0;
+                  handleChange('homePrice', price);
+                  handleChange('loanAmount', Math.round(price * 0.8));
+                }}
+                className="input-field pl-10"
+                placeholder="400000"
+              />
+            </div>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Loan Amount</label>
-            <input
-              type="range"
-              min={inputs.homePrice * 0.5}
-              max={inputs.homePrice * 0.97}
-              step="5000"
-              value={inputs.loanAmount}
-              onChange={(e) => setInputs({...inputs, loanAmount: parseInt(e.target.value)})}
-              className="w-full"
-            />
-            <div className="text-right text-lg font-semibold text-teal-600">{formatCurrency(inputs.loanAmount)}</div>
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="number"
+                value={inputs.loanAmount}
+                onChange={(e) => handleChange('loanAmount', parseInt(e.target.value) || 0)}
+                className="input-field pl-10"
+                placeholder="320000"
+              />
+            </div>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">State Transfer Tax Level</label>
             <select
               value={inputs.state}
-              onChange={(e) => setInputs({...inputs, state: e.target.value})}
+              onChange={(e) => handleChange('state', e.target.value)}
               className="input-field"
             >
               <option value="low">Low (e.g., Texas, Colorado)</option>

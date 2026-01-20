@@ -273,19 +273,22 @@ const FinancialReadiness = () => {
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Down Payment Percentage
                 </label>
-                <select
-                  name="downPaymentPercent"
-                  value={formData.downPaymentPercent}
-                  onChange={handleInputChange}
-                  className="input-field"
-                >
-                  <option value="3">3% - Minimum (Higher PMI)</option>
-                  <option value="5">5% - Low Down Payment</option>
-                  <option value="10">10% - Moderate</option>
-                  <option value="15">15% - Good</option>
-                  <option value="20">20% - Recommended (No PMI)</option>
-                  <option value="25">25% - Strong Position</option>
-                </select>
+                <div className="relative">
+                  <input
+                    type="number"
+                    name="downPaymentPercent"
+                    value={formData.downPaymentPercent}
+                    onChange={handleInputChange}
+                    className="input-field pr-8"
+                    placeholder="20"
+                    min="0"
+                    max="100"
+                    step="1"
+                    required
+                  />
+                  <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">%</span>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">20% or more avoids PMI</p>
               </div>
 
               <button type="submit" className="btn-primary w-full">
