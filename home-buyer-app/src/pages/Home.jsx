@@ -74,7 +74,7 @@ const Home = () => {
               <span className="text-blue-200"> in Texas</span>
             </h1>
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              Expert guidance designed for Texas home buyers. Protect your money, understand Texas-specific rules 
+              Educational guidance for Texas home buyers. Protect your money, understand Texas-specific rules 
               like the Option Period, and make informed decisions every step of the way.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -128,10 +128,10 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Your Expert Buyer's Agent
+              Your Home Buying Education Hub
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              We act as your advocate, risk analyst, and financial loss-prevention expert — 
+              Educational resources to help you understand risks, analyze finances, and protect your money — 
               all focused on protecting your interests.
             </p>
           </div>
