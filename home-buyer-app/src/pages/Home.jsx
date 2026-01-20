@@ -12,8 +12,7 @@ import {
   Home as HomeIcon,
   Search,
   FileText,
-  Star,
-  MessageSquare
+  Star
 } from 'lucide-react';
 
 const Home = () => {
@@ -248,33 +247,8 @@ const Home = () => {
               Tools to Help You Decide
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Use our interactive calculators, AI assistant, checklists, and dictionary to make data-driven decisions.
+              Use our interactive calculators, checklists, and dictionary to make data-driven decisions.
             </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8 mb-8">
-            {/* AI Negotiation Assistant - Featured */}
-            <Link to="/negotiation" className="group md:col-span-2">
-              <div className="card h-full border-2 border-transparent group-hover:border-purple-500 bg-gradient-to-r from-purple-50 to-indigo-50">
-                <div className="flex items-start space-x-4">
-                  <div className="bg-gradient-to-br from-purple-500 to-indigo-600 p-4 rounded-xl">
-                    <MessageSquare className="h-8 w-8 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <h3 className="text-xl font-semibold text-gray-900">AI Negotiation Assistant</h3>
-                      <span className="bg-purple-100 text-purple-700 text-xs font-medium px-2 py-1 rounded-full">NEW</span>
-                    </div>
-                    <p className="text-gray-600 mb-4">
-                      Enter property details and generate a comprehensive research prompt for ChatGPT to analyze negotiation leverage, fair pricing, and offer strategy.
-                    </p>
-                    <span className="inline-flex items-center text-purple-600 font-medium">
-                      Try AI Assistant <ArrowRight className="ml-2 h-4 w-4" />
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </Link>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -318,17 +292,19 @@ const Home = () => {
 
             <Link to="/dictionary" className="group">
               <div className="card h-full border-2 border-transparent group-hover:border-orange-500">
-                <div className="bg-orange-100 p-4 rounded-xl group-hover:bg-orange-600 transition-colors duration-200">
-                  <BookOpen className="h-8 w-8 text-orange-600 group-hover:text-white transition-colors duration-200" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Home Buying Dictionary</h3>
-                  <p className="text-gray-600 mb-4">
-                    Don't know what "earnest money" means? Learn all the terms in plain English.
-                  </p>
-                  <span className="inline-flex items-center text-orange-600 font-medium">
-                    Learn Terms <ArrowRight className="ml-2 h-4 w-4" />
-                  </span>
+                <div className="flex items-start space-x-4">
+                  <div className="bg-orange-100 p-4 rounded-xl group-hover:bg-orange-600 transition-colors duration-200">
+                    <BookOpen className="h-8 w-8 text-orange-600 group-hover:text-white transition-colors duration-200" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">Home Buying Dictionary</h3>
+                    <p className="text-gray-600 mb-4">
+                      Don't know what "earnest money" means? Learn all the terms in plain English.
+                    </p>
+                    <span className="inline-flex items-center text-orange-600 font-medium">
+                      Learn Terms <ArrowRight className="ml-2 h-4 w-4" />
+                    </span>
+                  </div>
                 </div>
               </div>
             </Link>

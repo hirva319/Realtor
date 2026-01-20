@@ -29,7 +29,6 @@ const Footer = () => {
             <ul className="space-y-2 text-gray-400">
               <li><a href="/financial-readiness" className="hover:text-white transition-colors">Financial Readiness</a></li>
               <li><a href="/buying-phases" className="hover:text-white transition-colors">Home Buying Phases</a></li>
-              <li><a href="/negotiation" className="hover:text-white transition-colors">AI Negotiation Assistant</a></li>
               <li><a href="/calculators" className="hover:text-white transition-colors">Calculators</a></li>
               <li><a href="/checklists" className="hover:text-white transition-colors">Checklists</a></li>
               <li><a href="/red-flags" className="hover:text-white transition-colors">Red Flags</a></li>

@@ -8,7 +8,6 @@ import Calculators from './pages/Calculators';
 import Checklists from './pages/Checklists';
 import RedFlags from './pages/RedFlags';
 import Dictionary from './pages/Dictionary';
-import NegotiationAssistant from './pages/NegotiationAssistant';
 
 function App() {
   return (
@@ -24,7 +23,6 @@ function App() {
             <Route path="/checklists" element={<Checklists />} />
             <Route path="/red-flags" element={<RedFlags />} />
             <Route path="/dictionary" element={<Dictionary />} />
-            <Route path="/negotiation" element={<NegotiationAssistant />} />
           </Routes>
         </main>
         <Footer />
