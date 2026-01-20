@@ -14,31 +14,140 @@ import {
   TrendingUp,
   Shield,
   Calculator,
-  Clock,
-  Users,
-  Building,
   Star,
   Handshake,
-  Eye
+  Eye,
+  XCircle,
+  Clock,
+  Phone,
+  FileSearch,
+  BadgeDollarSign,
+  PiggyBank,
+  Building,
+  Percent,
+  Calendar,
+  Users,
+  Hammer,
+  ThumbsUp,
+  ThumbsDown,
+  Lightbulb,
+  ArrowRight,
+  CircleDollarSign,
+  HelpCircle
 } from 'lucide-react';
 
-// Helper function to render text with bold formatting
-const FormattedText = ({ text }) => {
-  // Split by **text** pattern and render bold sections
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+// Simple card for key facts
+const FactCard = ({ icon: Icon, title, value, color = 'blue' }) => {
+  const colors = {
+    blue: 'bg-blue-100 text-blue-600 border-blue-200',
+    green: 'bg-green-100 text-green-600 border-green-200',
+    orange: 'bg-orange-100 text-orange-600 border-orange-200',
+    red: 'bg-red-100 text-red-600 border-red-200',
+    purple: 'bg-purple-100 text-purple-600 border-purple-200',
+  };
   
   return (
-    <>
-      {parts.map((part, index) => {
-        if (part.startsWith('**') && part.endsWith('**')) {
-          // Remove ** and render as bold
-          return <strong key={index} className="font-semibold text-gray-800">{part.slice(2, -2)}</strong>;
-        }
-        return <span key={index}>{part}</span>;
-      })}
-    </>
+    <div className={`${colors[color]} border-2 rounded-xl p-4 text-center`}>
+      <Icon className="h-8 w-8 mx-auto mb-2" />
+      <div className="text-2xl font-bold">{value}</div>
+      <div className="text-sm font-medium">{title}</div>
+    </div>
   );
 };
+
+// Do and Don't comparison
+const DoAndDont = ({ doItems, dontItems }) => (
+  <div className="grid md:grid-cols-2 gap-4 my-4">
+    <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4">
+      <div className="flex items-center gap-2 mb-3 text-green-700 font-bold">
+        <ThumbsUp className="h-5 w-5" />
+        DO THIS
+      </div>
+      <ul className="space-y-2">
+        {doItems.map((item, i) => (
+          <li key={i} className="flex items-start gap-2 text-green-700 text-sm">
+            <CheckCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4">
+      <div className="flex items-center gap-2 mb-3 text-red-700 font-bold">
+        <ThumbsDown className="h-5 w-5" />
+        DON'T DO THIS
+      </div>
+      <ul className="space-y-2">
+        {dontItems.map((item, i) => (
+          <li key={i} className="flex items-start gap-2 text-red-700 text-sm">
+            <XCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+);
+
+// Simple tip box
+const TipBox = ({ children, type = 'tip' }) => {
+  const styles = {
+    tip: 'bg-blue-50 border-blue-300 text-blue-800',
+    warning: 'bg-orange-50 border-orange-300 text-orange-800',
+    danger: 'bg-red-50 border-red-300 text-red-800',
+    success: 'bg-green-50 border-green-300 text-green-800',
+    texas: 'bg-yellow-50 border-yellow-300 text-yellow-800',
+  };
+  const icons = {
+    tip: Lightbulb,
+    warning: AlertTriangle,
+    danger: XCircle,
+    success: CheckCircle,
+    texas: Star,
+  };
+  const Icon = icons[type];
+  
+  return (
+    <div className={`${styles[type]} border-2 rounded-xl p-4 my-4`}>
+      <div className="flex items-start gap-3">
+        <Icon className="h-5 w-5 mt-0.5 flex-shrink-0" />
+        <div className="text-sm">{children}</div>
+      </div>
+    </div>
+  );
+};
+
+// Cost breakdown visual
+const CostBreakdown = ({ items, total, title }) => (
+  <div className="bg-gray-50 rounded-xl p-4 my-4">
+    <h4 className="font-bold text-gray-900 mb-3">{title}</h4>
+    <div className="space-y-2">
+      {items.map((item, i) => (
+        <div key={i} className="flex justify-between items-center py-1 border-b border-gray-200 last:border-0">
+          <span className="text-gray-600">{item.label}</span>
+          <span className="font-semibold">{item.value}</span>
+        </div>
+      ))}
+      <div className="flex justify-between items-center py-2 bg-blue-100 rounded-lg px-3 mt-2">
+        <span className="font-bold text-blue-900">TOTAL</span>
+        <span className="font-bold text-blue-900 text-lg">{total}</span>
+      </div>
+    </div>
+  </div>
+);
+
+// Simple numbered step
+const SimpleStep = ({ number, title, description }) => (
+  <div className="flex gap-4 items-start">
+    <div className="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold flex-shrink-0">
+      {number}
+    </div>
+    <div>
+      <div className="font-semibold text-gray-900">{title}</div>
+      <div className="text-gray-600 text-sm">{description}</div>
+    </div>
+  </div>
+);
 
 const BuyingPhases = () => {
   const [expandedPhase, setExpandedPhase] = useState(0);
@@ -46,818 +155,627 @@ const BuyingPhases = () => {
   const phases = [
     {
       id: 0,
-      title: 'Get Pre-Approved First',
-      subtitle: 'Before You Even Look at Houses',
-      icon: DollarSign,
+      title: 'Get Your Loan Ready First',
+      subtitle: 'Do this before you look at any houses',
+      icon: BadgeDollarSign,
       color: 'blue',
-      description: 'Never start house hunting without a pre-approval letter. This shows sellers you\'re serious and tells you exactly what you can afford.',
-      keyPoints: [
-        {
-          title: 'Why Pre-Approval Matters',
-          content: `Pre-approval is NOT the same as pre-qualification:
+      shortDescription: 'Talk to a bank and find out how much money they will lend you.',
+      content: (
+        <>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <FactCard icon={Phone} title="Talk to banks" value="3+" color="blue" />
+            <FactCard icon={FileText} title="Get pre-approved" value="Yes" color="green" />
+            <FactCard icon={Clock} title="How long" value="1-2 weeks" color="orange" />
+            <FactCard icon={DollarSign} title="Cost" value="Free" color="green" />
+          </div>
 
-**Pre-qualification:** Quick estimate based on what you tell them. Means almost nothing.
+          <h4 className="font-bold text-lg text-gray-900 mb-3">What is Pre-Approval?</h4>
+          <p className="text-gray-600 mb-4">
+            Pre-approval means the bank looked at your money situation and said "Yes, we will lend you up to $X amount." This is different from pre-qualification, which is just a guess.
+          </p>
 
-**Pre-approval:** Lender actually verifies your income, assets, and credit. They commit to lending you a specific amount.
+          <DoAndDont 
+            doItems={[
+              'Get pre-approved BEFORE looking at houses',
+              'Talk to at least 3 different banks',
+              'Ask about the interest rate AND fees',
+              'Ask about Texas programs that can help you'
+            ]}
+            dontItems={[
+              'Just look at houses without knowing your budget',
+              'Only talk to one bank',
+              'Skip reading the fine print',
+              'Be afraid to ask questions'
+            ]}
+          />
 
-In competitive Texas markets, sellers often won't even look at offers without pre-approval letters.`,
-        },
-        {
-          title: 'Documents You\'ll Need',
-          content: `Gather these BEFORE applying:
-• 2 years of tax returns (all pages)
-• 2 years of W-2s
-• 2 months of pay stubs
-• 2-3 months of bank statements (all accounts)
-• List of all debts with monthly payments
-• Driver's license
-• Social Security number
+          <h4 className="font-bold text-lg text-gray-900 mb-3">Papers You Will Need</h4>
+          <div className="grid md:grid-cols-2 gap-2 mb-4">
+            {[
+              '2 years of tax returns',
+              '2 years of W-2 forms',
+              'Recent pay stubs (30 days)',
+              'Bank statements (2-3 months)',
+              'List of your debts',
+              'Driver\'s license',
+            ].map((item, i) => (
+              <div key={i} className="flex items-center gap-2 bg-gray-50 rounded-lg p-2">
+                <CheckCircle className="h-4 w-4 text-green-600" />
+                <span className="text-sm">{item}</span>
+              </div>
+            ))}
+          </div>
 
-Self-employed? You'll also need profit/loss statements and possibly business tax returns.`,
-        },
-        {
-          title: 'Shop Multiple Lenders (Critical!)',
-          content: `Get quotes from at least 3 lenders. Compare:
-• Interest rate AND APR (APR includes fees)
-• Total closing costs
-• Loan origination fees
-• Points options
+          <TipBox type="texas">
+            <strong>Texas Help Programs:</strong> Texas has programs that give you money for your down payment! Ask your bank about TSAHC and "My First Texas Home" programs.
+          </TipBox>
 
-A 0.25% rate difference on a $320,000 loan = ~$17,000 over 30 years!
-
-Lender types to consider:
-• Big banks (may have relationship discounts)
-• Credit unions (often competitive rates)
-• Mortgage brokers (shop multiple lenders for you)
-• Online lenders (lower overhead = potentially lower rates)`,
-        },
-        {
-          title: 'Texas Buyer Assistance Programs',
-          content: `Don't miss these Texas programs:
-
-**TSAHC (Texas State Affordable Housing Corporation):**
-• Down payment assistance grants
-• Mortgage Credit Certificates (tax credits)
-• Below-market interest rates
-
-**My First Texas Home:**
-• Down payment/closing cost assistance
-• 30-year fixed rate mortgages
-• For qualifying buyers and veterans
-
-**Local Programs:**
-• Many Texas cities have their own assistance programs
-• Ask your lender what programs you qualify for!`,
-        },
-      ],
-      texasInfo: 'Texas has excellent buyer assistance programs. TSAHC and My First Texas Home can provide significant down payment assistance for qualifying buyers - don\'t skip these!',
-      redFlag: 'Don\'t house hunt without pre-approval. You\'ll waste time looking at homes you can\'t afford and sellers won\'t take you seriously.',
-      moneyProtection: 'Shopping lenders is one of the easiest ways to save thousands. Don\'t just go with the first lender you talk to.',
+          <TipBox type="tip">
+            <strong>Save Money Tip:</strong> A small difference in interest rate can save you thousands! If Bank A offers 7% and Bank B offers 6.75%, that 0.25% difference saves about $17,000 over 30 years on a $320,000 loan.
+          </TipBox>
+        </>
+      ),
     },
     {
       id: 1,
-      title: 'Understand Your True Budget',
-      subtitle: 'What You Can ACTUALLY Afford',
+      title: 'Know What You Can Really Afford',
+      subtitle: 'Your real costs are more than just the mortgage',
       icon: Calculator,
       color: 'green',
-      description: 'Being approved for a loan doesn\'t mean you can comfortably afford it. Calculate your REAL monthly costs before setting a budget.',
-      keyPoints: [
-        {
-          title: 'The Real Monthly Cost (Not Just Mortgage)',
-          content: `Your TRUE monthly payment includes:
+      shortDescription: 'The bank may approve you for more than you should actually spend.',
+      content: (
+        <>
+          <TipBox type="warning">
+            <strong>Important:</strong> Just because a bank says you CAN borrow $400,000 doesn't mean you SHOULD. Make sure you can still pay for food, car, and fun stuff!
+          </TipBox>
 
-**PITI (the basics):**
-• Principal & Interest (your mortgage payment)
-• Property Taxes (HIGH in Texas - budget 2-2.5% of home value!)
-• Insurance (homeowners + flood if in flood zone)
+          <h4 className="font-bold text-lg text-gray-900 mb-3">Your Real Monthly Cost</h4>
+          <p className="text-gray-600 mb-4">
+            When you buy a house, you don't just pay the mortgage. Here's what you REALLY pay each month:
+          </p>
 
-**Plus these often-forgotten costs:**
-• HOA fees (if applicable)
-• PMI (if down payment < 20%)
-• Utilities (often higher in a house)
-• Maintenance (budget 1-2% of home value annually)
-• Lawn care / pest control
+          <CostBreakdown 
+            title="Example: $400,000 House in Texas"
+            items={[
+              { label: 'Mortgage payment', value: '$2,130' },
+              { label: 'Property taxes', value: '$667' },
+              { label: 'Home insurance', value: '$150' },
+              { label: 'HOA fees (if any)', value: '$150' },
+              { label: 'Repairs & maintenance', value: '$333' },
+              { label: 'Utilities', value: '$200' },
+            ]}
+            total="$3,630/month"
+          />
 
-**Texas Example ($400,000 home):**
-• Mortgage (P&I): $2,130/month
-• Property Tax: $667/month (2% rate)
-• Insurance: $200/month
-• HOA: $150/month
-• Maintenance: $333/month
-• **True Cost: $3,480/month** (not $2,130!)`,
-        },
-        {
-          title: 'The 28/36 Rule',
-          content: `Use these guidelines to stay financially healthy:
+          <TipBox type="danger">
+            <strong>Texas Warning:</strong> Texas has HIGH property taxes! We don't have state income tax, but we pay more in property taxes than most states. On a $400,000 home, expect to pay $7,000-$10,000 per year in property taxes alone.
+          </TipBox>
 
-**Front-End Ratio (28% rule):**
-Total housing costs should not exceed 28% of gross monthly income
+          <h4 className="font-bold text-lg text-gray-900 mb-3">The 28/36 Rule</h4>
+          <p className="text-gray-600 mb-4">This is a simple rule to know if you can afford a house:</p>
+          
+          <div className="grid md:grid-cols-2 gap-4 mb-4">
+            <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4 text-center">
+              <div className="text-4xl font-bold text-blue-600">28%</div>
+              <div className="text-sm text-blue-800 mt-2">
+                Your house payment should be less than 28% of your monthly income
+              </div>
+            </div>
+            <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4 text-center">
+              <div className="text-4xl font-bold text-green-600">36%</div>
+              <div className="text-sm text-green-800 mt-2">
+                ALL your debts (house + car + cards) should be less than 36% of your income
+              </div>
+            </div>
+          </div>
 
-**Back-End Ratio (36% rule):**
-Total debt payments (housing + car + student loans + credit cards) should not exceed 36% of gross income
+          <h4 className="font-bold text-lg text-gray-900 mb-3">Don't Forget: Emergency Savings!</h4>
+          <p className="text-gray-600 mb-4">
+            After you buy, you should still have 6 months of expenses saved. Things break. People lose jobs. Don't spend all your savings on the house!
+          </p>
 
-**Example:**
-$100,000 income = $8,333/month gross
-• Max housing: $2,333/month
-• Max total debt: $3,000/month
-
-Just because a bank approves you for more doesn't mean you should borrow it!`,
-        },
-        {
-          title: 'Emergency Fund After Closing',
-          content: `This is a MUST that many buyers ignore:
-
-After paying down payment + closing costs, you should still have 6 months of expenses saved.
-
-**Why this matters:**
-• Job loss can happen to anyone
-• Home repairs are expensive and unpredictable
-• You don't want to be "house poor"
-
-**Red Flag Rule:**
-If closing on this home would leave you with less than 3 months of expenses saved, you're buying too much house.`,
-        },
-        {
-          title: 'Texas Property Tax Warning',
-          content: `Texas has NO state income tax, but makes up for it with HIGH property taxes:
-
-**Texas average: 1.8-2.5% of home value annually**
-(National average is about 1.1%)
-
-On a $400,000 home:
-• Texas: $7,200-$10,000/year ($600-$833/month)
-• National average: ~$4,400/year ($367/month)
-
-**Also watch for:**
-• Property taxes can INCREASE significantly after you buy (assessed at purchase price)
-• Different areas have different rates (research before you buy)
-• Tax protests are common in Texas - you can fight your assessment`,
-        },
-      ],
-      texasInfo: 'Texas property taxes are among the highest in the nation. A $400,000 home can easily have $8,000+/year in property taxes. Factor this into your budget!',
-      redFlag: 'If your post-closing savings would be less than 3-6 months of expenses, you\'re buying too much house.',
-      moneyProtection: 'Budget for the TRUE monthly cost, not just the mortgage payment. Many buyers are shocked by their real expenses.',
+          <DoAndDont 
+            doItems={[
+              'Keep 6 months of expenses saved after buying',
+              'Include ALL costs when budgeting',
+              'Leave room in your budget for fun',
+              'Plan for repairs (things break!)'
+            ]}
+            dontItems={[
+              'Spend all your savings on the down payment',
+              'Only think about the mortgage payment',
+              'Forget about property taxes',
+              'Assume nothing will break'
+            ]}
+          />
+        </>
+      ),
     },
     {
       id: 2,
-      title: 'House Hunting & Market Research',
-      subtitle: 'Finding the Right Home at the Right Price',
+      title: 'Find the Right House',
+      subtitle: 'Look beyond the pretty pictures',
       icon: Search,
       color: 'purple',
-      description: 'Before making offers, understand the market. This knowledge is your negotiating power.',
-      keyPoints: [
-        {
-          title: 'What to Research for EVERY Home',
-          content: `Before getting excited about a house, research:
+      shortDescription: 'Research the house AND the neighborhood before you fall in love.',
+      content: (
+        <>
+          <h4 className="font-bold text-lg text-gray-900 mb-3">What to Research</h4>
+          
+          <div className="grid md:grid-cols-3 gap-4 mb-6">
+            <div className="bg-purple-50 border-2 border-purple-200 rounded-xl p-4">
+              <Calendar className="h-8 w-8 text-purple-600 mb-2" />
+              <div className="font-bold text-purple-900">Days on Market</div>
+              <div className="text-sm text-purple-700 mt-1">
+                How long has it been for sale?
+              </div>
+              <div className="mt-3 space-y-1 text-xs">
+                <div className="flex justify-between"><span>Under 7 days:</span><span className="font-semibold">Hot! Many buyers want it</span></div>
+                <div className="flex justify-between"><span>7-30 days:</span><span className="font-semibold">Normal</span></div>
+                <div className="flex justify-between"><span>60+ days:</span><span className="font-semibold">You can negotiate!</span></div>
+              </div>
+            </div>
+            
+            <div className="bg-orange-50 border-2 border-orange-200 rounded-xl p-4">
+              <TrendingUp className="h-8 w-8 text-orange-600 mb-2" />
+              <div className="font-bold text-orange-900">Price Changes</div>
+              <div className="text-sm text-orange-700 mt-1">
+                Has the price dropped?
+              </div>
+              <div className="mt-3 text-xs text-orange-800">
+                If the seller lowered the price, they might be getting desperate. This means you have more power to negotiate!
+              </div>
+            </div>
+            
+            <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4">
+              <Building className="h-8 w-8 text-green-600 mb-2" />
+              <div className="font-bold text-green-900">Neighborhood</div>
+              <div className="text-sm text-green-700 mt-1">
+                Can you sell it later?
+              </div>
+              <div className="mt-3 text-xs text-green-800">
+                Ask yourself: "If I need to sell in 3-5 years, will people want to buy this house?"
+              </div>
+            </div>
+          </div>
 
-**Days on Market (DOM):**
-• Under 7 days: Hot property, expect competition
-• 7-30 days: Normal market
-• 30-60 days: May have issues or be overpriced
-• 60+ days: Significant negotiation leverage
+          <TipBox type="texas">
+            <strong>Texas Foundation Warning:</strong> Texas has clay soil that moves a lot. This causes foundation problems. ALWAYS get a foundation inspection on any Texas home, especially if it's more than 10 years old. A $400 inspection can save you $30,000+ in repairs!
+          </TipBox>
 
-**Price History:**
-• Any price reductions? How many?
-• Original list price vs current?
-• How long between reductions?
+          <h4 className="font-bold text-lg text-gray-900 mb-3">Things That Make Houses Hard to Sell Later</h4>
+          <div className="grid md:grid-cols-2 gap-2 mb-4">
+            {[
+              'Only 1 bathroom',
+              'No garage (Texas is hot!)',
+              'Weird floor plan',
+              'On a busy street',
+              'Near highway noise',
+              'Bad school district',
+              'High HOA fees',
+              'Flooding area',
+            ].map((item, i) => (
+              <div key={i} className="flex items-center gap-2 bg-red-50 rounded-lg p-2">
+                <XCircle className="h-4 w-4 text-red-600" />
+                <span className="text-sm text-red-800">{item}</span>
+              </div>
+            ))}
+          </div>
 
-**Comparable Sales (SOLD prices, not listings):**
-• What have similar homes actually sold for?
-• Price per square foot in the area
-• Are prices trending up or down?`,
-        },
-        {
-          title: 'The Exit Strategy Question',
-          content: `Always ask: "If I needed to sell this home in 2-5 years, how bad could it get?"
-
-**Research neighborhood liquidity:**
-• How quickly do homes sell in this area?
-• What's the average discount from list to sale price?
-• Are there many foreclosures or distressed sales nearby?
-
-**Red flags for resale:**
-• Unusual floor plans
-• Only one bathroom
-• No garage in Texas (it's hot!)
-• Busy road or highway proximity
-• Near commercial development
-• Declining neighborhood
-• HOA issues or high fees`,
-        },
-        {
-          title: 'Texas-Specific Considerations',
-          content: `Things that matter especially in Texas:
-
-**Foundation:**
-• Texas clay soil causes foundation issues
-• Ask about foundation history
-• Look for signs: cracks, sticking doors/windows
-• Get foundation inspection (budget $300-$500)
-
-**Flood Zones:**
-• Many Texas areas flood
-• Check FEMA flood maps
-• Flood insurance can add $1,000-$3,000+/year
-• Even outside flood zones, Texas flooding is real
-
-**HVAC:**
-• Central AC is essential (obviously)
-• Check the age and condition of the system
-• Replacement cost: $5,000-$15,000
-• Texas summers destroy old units
-
-**Roof:**
-• Hail damage is common
-• Check age and recent repairs
-• Ask about insurance claims`,
-        },
-        {
-          title: 'Working with Your Buyer\'s Agent',
-          content: `Your agent should be helping you with market research, but verify independently:
-
-**What to expect from your agent:**
-• Comparable sales analysis (CMA)
-• Market condition advice
-• Neighborhood information
-• Negotiation strategy guidance
-
-**What to verify yourself:**
-• Don't rely solely on agent's recommendations
-• Check sold prices on Zillow/Redfin
-• Drive by at different times of day
-• Talk to neighbors if possible
-
-**Texas Requirement:**
-You must sign a Buyer Representation Agreement before your agent can show you homes. This should specify how they will be compensated.`,
-        },
-      ],
-      texasInfo: 'Texas foundation issues are REAL due to clay soil. Always get a foundation inspection, especially on homes over 10 years old. This can save you from a $30,000+ nightmare.',
-      redFlag: 'Don\'t pay list price on homes that have been on market 60+ days. Use days on market as negotiation leverage.',
-      moneyProtection: 'Research comparable SOLD prices, not list prices. List prices are wishes; sold prices are reality.',
+          <DoAndDont 
+            doItems={[
+              'Check what similar homes SOLD for (not listed for)',
+              'Visit at different times of day',
+              'Talk to neighbors if you can',
+              'Check flood maps online',
+              'Research the school district'
+            ]}
+            dontItems={[
+              'Fall in love with the first house',
+              'Skip researching the neighborhood',
+              'Ignore red flags because you like the kitchen',
+              'Trust the listing price without checking'
+            ]}
+          />
+        </>
+      ),
     },
     {
       id: 3,
-      title: 'Making an Offer',
-      subtitle: 'Negotiation Strategy',
+      title: 'Make an Offer',
+      subtitle: 'Protect yourself with the right contract terms',
       icon: Handshake,
       color: 'orange',
-      description: 'Your offer should be strategic, protective, and backed by data - not driven by emotion.',
-      keyPoints: [
-        {
-          title: 'Texas Contract Basics (TREC Forms)',
-          content: `Texas uses standardized contracts from the Texas Real Estate Commission (TREC):
+      shortDescription: 'Your offer is more than just the price. Include protections!',
+      content: (
+        <>
+          <h4 className="font-bold text-lg text-gray-900 mb-3">Parts of Your Offer</h4>
+          
+          <div className="space-y-4 mb-6">
+            <div className="bg-white border-2 border-gray-200 rounded-xl p-4">
+              <div className="flex items-start gap-3">
+                <div className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-bold">1</div>
+                <div>
+                  <div className="font-bold text-gray-900">Purchase Price</div>
+                  <div className="text-gray-600 text-sm">How much you'll pay for the house</div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-yellow-50 border-2 border-yellow-300 rounded-xl p-4">
+              <div className="flex items-start gap-3">
+                <div className="bg-yellow-600 text-white px-3 py-1 rounded-full text-sm font-bold">2</div>
+                <div>
+                  <div className="font-bold text-yellow-900">Option Fee + Option Period (TEXAS ONLY)</div>
+                  <div className="text-yellow-800 text-sm mt-1">
+                    <strong>This is your best protection!</strong>
+                  </div>
+                  <div className="text-yellow-700 text-sm mt-2">
+                    You pay $100-$500 to the seller. In return, you get 7-14 days to back out for ANY reason. If you don't like what the inspector finds? Walk away. Changed your mind? Walk away. You only lose this small fee.
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-white border-2 border-gray-200 rounded-xl p-4">
+              <div className="flex items-start gap-3">
+                <div className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-bold">3</div>
+                <div>
+                  <div className="font-bold text-gray-900">Earnest Money</div>
+                  <div className="text-gray-600 text-sm">
+                    A bigger deposit (usually 1-3% of price) that shows you're serious. This is held by the title company, NOT the seller. You get this back if you back out during your option period.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-**Key components of your offer:**
-• Purchase price
-• Option fee and option period length
-• Earnest money amount
-• Closing date
-• Financing details
-• What stays/goes with the home
-• Seller concessions (if requesting)
+          <TipBox type="texas">
+            <strong>Texas Option Period:</strong> This is YOUR best friend! Never skip it. Pay the $200-500 option fee - it's the best protection you can buy.
+          </TipBox>
 
-**The Option Fee & Period (Texas-Specific):**
-This is YOUR most important protection!
-• Pay $100-$500 directly to seller (non-refundable)
-• Get 7-14 days to back out for ANY reason
-• This is NOT the same as earnest money
-• This is when you do inspections
+          <h4 className="font-bold text-lg text-gray-900 mb-3">Things You Can Negotiate (Most People Don't Know!)</h4>
+          
+          <div className="grid md:grid-cols-2 gap-4 mb-6">
+            <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+              <div className="font-semibold text-green-900">Ask seller to pay your closing costs</div>
+              <div className="text-green-700 text-sm">Could save you $10,000+ in cash at closing!</div>
+            </div>
+            <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+              <div className="font-semibold text-green-900">Ask for repairs or repair money</div>
+              <div className="text-green-700 text-sm">Better to get cash credit than let seller do cheap repairs</div>
+            </div>
+            <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+              <div className="font-semibold text-green-900">Ask for a home warranty</div>
+              <div className="text-green-700 text-sm">Covers repairs for the first year</div>
+            </div>
+            <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+              <div className="font-semibold text-green-900">Negotiate the agent fees</div>
+              <div className="text-green-700 text-sm">Yes, these are negotiable too!</div>
+            </div>
+          </div>
 
-**Earnest Money:**
-• Typically 1-3% of purchase price
-• Held by title company (not seller)
-• Applied to your costs at closing
-• At risk if you back out after option period (without contingency)`,
-        },
-        {
-          title: 'Things You Can Negotiate (Many Buyers Don\'t Know!)',
-          content: `Everything in real estate is negotiable:
-
-**Price** - Obviously
-
-**Seller Concessions (Closing Cost Help):**
-• Seller can pay up to 3-6% of price toward your closing costs
-• This is often BETTER than a price reduction
-• $10,000 less price = ~$50/month savings
-• $10,000 seller concession = $10,000 you don't pay at closing
-
-**Real Estate Commissions:**
-• Buyer's agent commission can be negotiated
-• You can ask seller to pay your agent's fee
-• Recent rule changes make this more flexible
-• Don't be afraid to ask!
-
-**Other Negotiable Items:**
-• Home warranty (seller can pay)
-• Repairs or repair credits
-• Appliances and furniture
-• Closing date flexibility
-• Leaseback if seller needs time to move`,
-        },
-        {
-          title: 'Protecting Yourself in the Offer',
-          content: `ALWAYS include these protections:
-
-**Option Period (Texas):**
-• Get at least 7-10 days
-• More if it's an older home or you have concerns
-• This is your "free look" period
-
-**Financing Contingency:**
-• Protects you if your loan falls through
-• Typically 21-30 days
-• You get earnest money back if you can't get financing
-
-**Appraisal Contingency:**
-• Protects you from overpaying
-• If home appraises low, you can renegotiate or walk away
-• Don't waive this!
-
-**Seller's Disclosure:**
-• Seller must disclose known issues
-• Review carefully
-• Use for negotiation leverage`,
-        },
-        {
-          title: 'When to Be Aggressive vs. Conservative',
-          content: `Your strategy depends on market conditions:
-
-**Hot Market (Multiple Offers):**
-• Offer at or slightly above asking
-• Shorter option period (but still get one!)
-• Higher earnest money shows seriousness
-• Consider escalation clause with cap
-• Still don't waive appraisal contingency
-
-**Normal Market:**
-• Offer based on comparable sales
-• Standard option period (10 days)
-• Standard earnest money (1-2%)
-• Room to negotiate
-
-**Buyer's Market (Home Sitting):**
-• Offer below asking (use days on market as leverage)
-• Request seller concessions
-• Longer option period
-• Request home warranty
-• Strong negotiating position`,
-        },
-      ],
-      texasInfo: 'The Texas Option Period is your best friend. It gives you the right to back out for ANY reason during that time. Never skip this! Pay the $200-$500 option fee - it\'s the best insurance you\'ll buy.',
-      redFlag: 'NEVER waive your option period, financing contingency, or appraisal contingency unless you fully understand and accept the risk of losing your earnest money.',
-      moneyProtection: 'Seller concessions toward closing costs often help you more than a price reduction. Ask for them!',
+          <DoAndDont 
+            doItems={[
+              'Always include an option period',
+              'Ask for seller help with closing costs',
+              'Base your offer on what similar homes SOLD for',
+              'Put ALL agreements in writing'
+            ]}
+            dontItems={[
+              'Skip the option period to "win" the house',
+              'Offer more than you can afford because you love it',
+              'Trust verbal promises',
+              'Let emotions drive your decisions'
+            ]}
+          />
+        </>
+      ),
     },
     {
       id: 4,
-      title: 'Option Period & Inspections',
-      subtitle: 'Your Protected Investigation Time (Texas)',
+      title: 'Get the House Inspected',
+      subtitle: 'Find problems BEFORE you buy',
       icon: Eye,
       color: 'red',
-      description: 'The option period is your "free look" time. Use it wisely - this is where you discover problems before they become YOUR problems.',
-      keyPoints: [
-        {
-          title: 'How the Texas Option Period Works',
-          content: `The option period starts the day AFTER the contract is signed:
+      shortDescription: 'Pay for inspections now to avoid expensive surprises later.',
+      content: (
+        <>
+          <TipBox type="warning">
+            <strong>Do this during your Option Period!</strong> Schedule inspections right away - you only have 7-14 days. If you find big problems, you can walk away and only lose your small option fee.
+          </TipBox>
 
-**Timeline Example:**
-• Contract signed Monday
-• Option period starts Tuesday
-• 10-day option period ends Friday the following week at 5:00 PM
+          <h4 className="font-bold text-lg text-gray-900 mb-3">Inspections You Need</h4>
+          
+          <div className="space-y-3 mb-6">
+            <div className="bg-white border-2 border-blue-200 rounded-xl p-4">
+              <div className="flex justify-between items-start">
+                <div>
+                  <div className="font-bold text-gray-900">General Home Inspection</div>
+                  <div className="text-gray-600 text-sm">Checks the whole house - roof, plumbing, electrical, etc.</div>
+                </div>
+                <div className="text-blue-600 font-bold">$350-500</div>
+              </div>
+            </div>
+            
+            <div className="bg-yellow-50 border-2 border-yellow-300 rounded-xl p-4">
+              <div className="flex justify-between items-start">
+                <div>
+                  <div className="font-bold text-yellow-900">Foundation Inspection</div>
+                  <div className="text-yellow-700 text-sm">
+                    <strong>VERY IMPORTANT IN TEXAS!</strong> Clay soil causes foundation problems.
+                  </div>
+                </div>
+                <div className="text-yellow-700 font-bold">$300-500</div>
+              </div>
+            </div>
+            
+            <div className="bg-white border-2 border-blue-200 rounded-xl p-4">
+              <div className="flex justify-between items-start">
+                <div>
+                  <div className="font-bold text-gray-900">Sewer Line Check</div>
+                  <div className="text-gray-600 text-sm">Camera goes into pipes to check for damage. Important for homes 20+ years old.</div>
+                </div>
+                <div className="text-blue-600 font-bold">$150-300</div>
+              </div>
+            </div>
+          </div>
 
-**Your rights during option period:**
-• Terminate for ANY reason
-• You only lose the option fee (not earnest money)
-• No explanation required
-• Just notify in writing before deadline
+          <CostBreakdown 
+            title="What Inspections Can Save You"
+            items={[
+              { label: 'Foundation repair', value: '$5,000 - $50,000' },
+              { label: 'New roof', value: '$8,000 - $25,000' },
+              { label: 'Sewer line replacement', value: '$5,000 - $25,000' },
+              { label: 'HVAC replacement', value: '$5,000 - $15,000' },
+              { label: 'Electrical panel', value: '$1,500 - $4,000' },
+            ]}
+            total="$500-1,500 in inspections can save you $50,000+"
+          />
 
-**Critical Warning:**
-If your option period ends and you haven't terminated, you can NO LONGER back out without risking your earnest money (unless financing or appraisal contingency applies).
+          <h4 className="font-bold text-lg text-gray-900 mb-3">Problems That Mean "Walk Away"</h4>
+          <div className="grid md:grid-cols-2 gap-2 mb-4">
+            {[
+              'Major foundation problems',
+              'Mold throughout the house',
+              'Aluminum wiring (fire hazard)',
+              'Active water leaks in walls',
+              'Roof needs full replacement',
+              'Major structural damage',
+            ].map((item, i) => (
+              <div key={i} className="flex items-center gap-2 bg-red-50 rounded-lg p-3">
+                <XCircle className="h-5 w-5 text-red-600" />
+                <span className="text-red-800">{item}</span>
+              </div>
+            ))}
+          </div>
 
-**Calendar this deadline immediately!**`,
-        },
-        {
-          title: 'Inspections to Schedule Immediately',
-          content: `Schedule these right away - don't wait!
-
-**General Home Inspection ($350-$500):**
-• Covers overall condition
-• 2-3 hours, attend in person
-• Review report same day
-
-**Foundation Inspection ($300-$500):**
-• HIGHLY RECOMMENDED in Texas
-• Clay soil = foundation movement
-• Could save you from $30,000+ problem
-
-**Sewer Scope ($150-$300):**
-• For homes 20+ years old
-• Sewer line replacement: $5,000-$25,000
-• Invisible without scope
-
-**Other Inspections to Consider:**
-• Roof ($200-$400) - if any concerns
-• HVAC ($100-$200) - if system is older
-• Pool/Spa ($150-$250) - if applicable
-• Termite/Pest ($75-$125)`,
-        },
-        {
-          title: 'What Inspectors Look For',
-          content: `Know what they're checking:
-
-**Structure & Foundation:**
-• Cracks in walls or foundation
-• Doors/windows that stick
-• Uneven floors
-• Signs of movement
-
-**Roof:**
-• Age and condition
-• Missing/damaged shingles
-• Signs of leaks in attic
-• Flashing around penetrations
-
-**Electrical:**
-• Panel condition and capacity
-• Wiring type (aluminum = red flag)
-• Outlets and fixtures working
-• GFCI protection in wet areas
-
-**Plumbing:**
-• Water pressure and drainage
-• Water heater condition/age
-• Signs of leaks
-• Sewer line condition (scope needed)
-
-**HVAC:**
-• Age and condition
-• Heating and cooling function
-• Ductwork condition
-• Filter and maintenance history`,
-        },
-        {
-          title: 'Deal-Breakers to Watch For',
-          content: `These issues often warrant walking away:
-
-**Structural/Foundation Problems:**
-• Active foundation movement
-• Major structural cracks
-• Unknown scope of damage
-• Cost: Potentially $20,000-$100,000+
-
-**Aluminum Wiring:**
-• Fire hazard
-• Insurance may refuse to cover
-• Remediation: $8,000-$15,000
-
-**Active Water Intrusion:**
-• Ongoing leaks
-• Mold potential
-• Source may be hard to find
-
-**Major System Failures:**
-• HVAC replacement: $5,000-$15,000
-• Roof replacement: $8,000-$25,000
-• Electrical panel: $1,500-$4,000
-
-**Environmental Issues:**
-• Mold requiring remediation
-• Asbestos
-• Lead paint (pre-1978 homes)
-
-If you find deal-breakers, USE YOUR OPTION PERIOD to walk away!`,
-        },
-      ],
-      texasInfo: 'Foundation inspections are essential in Texas due to expansive clay soil. A $400 inspection can save you from a $50,000 foundation repair bill.',
-      redFlag: 'Don\'t let the option period deadline pass without making a decision. Once it\'s over, your earnest money is at risk.',
-      moneyProtection: 'Spend $500-$1,500 on thorough inspections. This is the cheapest insurance you\'ll ever buy against major problems.',
+          <TipBox type="tip">
+            <strong>Go to the inspection!</strong> Don't just read the report. Be there, ask questions, and see the problems yourself.
+          </TipBox>
+        </>
+      ),
     },
     {
       id: 5,
-      title: 'Negotiating Repairs & Credits',
-      subtitle: 'Converting Inspection Findings into Savings',
-      icon: TrendingUp,
+      title: 'Negotiate Repairs',
+      subtitle: 'Use inspection findings to save money',
+      icon: Hammer,
       color: 'teal',
-      description: 'After inspections, it\'s time to negotiate. Know what to ask for and how to ask for it.',
-      keyPoints: [
-        {
-          title: 'Credits vs. Repairs - Always Choose Credits',
-          content: `When negotiating, request CREDITS instead of repairs:
+      shortDescription: 'Found problems? Ask for money off or repair credits.',
+      content: (
+        <>
+          <h4 className="font-bold text-lg text-gray-900 mb-3">Ask for Money, Not Repairs!</h4>
+          <p className="text-gray-600 mb-4">
+            When the inspection finds problems, you can ask the seller to fix them OR give you money to fix them yourself. <strong>Always ask for the money!</strong>
+          </p>
 
-**Why credits are better:**
-• You control the quality of work
-• You choose the contractor
-• You can prioritize what matters to you
-• Sellers do minimum-quality repairs
-• Repairs often aren't done properly
+          <div className="grid md:grid-cols-2 gap-4 mb-6">
+            <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4">
+              <div className="font-bold text-red-800 mb-2">If Seller Fixes It</div>
+              <ul className="text-red-700 text-sm space-y-1">
+                <li>• They hire the cheapest person</li>
+                <li>• You can't pick the contractor</li>
+                <li>• Often done poorly</li>
+                <li>• May just cover up problems</li>
+              </ul>
+            </div>
+            <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4">
+              <div className="font-bold text-green-800 mb-2">If You Get Money</div>
+              <ul className="text-green-700 text-sm space-y-1">
+                <li>• You pick the contractor</li>
+                <li>• You control the quality</li>
+                <li>• Get it done right</li>
+                <li>• Often get more value</li>
+              </ul>
+            </div>
+          </div>
 
-**Example:**
-Inspection finds roof needs $5,000 in repairs
+          <h4 className="font-bold text-lg text-gray-900 mb-3">How to Prioritize What to Ask For</h4>
+          
+          <div className="space-y-3 mb-6">
+            <div className="flex items-center gap-3 bg-red-100 rounded-lg p-3">
+              <div className="bg-red-600 text-white px-2 py-1 rounded text-sm font-bold">1st</div>
+              <div>
+                <div className="font-semibold text-red-900">Safety Issues</div>
+                <div className="text-red-700 text-sm">Electrical problems, gas leaks, structural issues</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 bg-orange-100 rounded-lg p-3">
+              <div className="bg-orange-600 text-white px-2 py-1 rounded text-sm font-bold">2nd</div>
+              <div>
+                <div className="font-semibold text-orange-900">Big Expensive Stuff</div>
+                <div className="text-orange-700 text-sm">Roof, HVAC, foundation, plumbing</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 bg-yellow-100 rounded-lg p-3">
+              <div className="bg-yellow-600 text-white px-2 py-1 rounded text-sm font-bold">3rd</div>
+              <div>
+                <div className="font-semibold text-yellow-900">Medium Stuff</div>
+                <div className="text-yellow-700 text-sm">Appliances, water heater, windows</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 bg-gray-100 rounded-lg p-3">
+              <div className="bg-gray-600 text-white px-2 py-1 rounded text-sm font-bold">4th</div>
+              <div>
+                <div className="font-semibold text-gray-900">Cosmetic Stuff</div>
+                <div className="text-gray-700 text-sm">Paint, carpet, landscaping - don't worry about these</div>
+              </div>
+            </div>
+          </div>
 
-Bad approach: "Seller, please fix the roof"
-(Seller does cheapest possible patch job)
+          <TipBox type="tip">
+            <strong>Get written quotes!</strong> Before negotiating, get repair estimates from contractors. "The roof needs $8,000 in repairs according to ABC Roofing" is more powerful than "the roof looks bad."
+          </TipBox>
 
-Good approach: "Seller, please provide $5,000 credit at closing"
-(You hire a quality roofer and control the work)`,
-        },
-        {
-          title: 'How to Prioritize Your Requests',
-          content: `Rank issues by importance:
-
-**Priority 1 - Safety Issues:**
-• Electrical hazards
-• Gas leaks
-• Structural concerns
-• Mold
-(These are non-negotiable)
-
-**Priority 2 - Major Systems:**
-• HVAC near end of life
-• Roof issues
-• Foundation concerns
-• Plumbing problems
-(Expensive to fix, affect habitability)
-
-**Priority 3 - Significant Repairs:**
-• Water heater replacement
-• Appliance issues
-• Window/door problems
-(Moderate cost, quality of life)
-
-**Priority 4 - Cosmetic Issues:**
-• Paint
-• Carpet
-• Landscaping
-(Don't spend negotiating capital on these)`,
-        },
-        {
-          title: 'Calculating What to Ask For',
-          content: `Get real numbers to support your requests:
-
-**Steps:**
-1. Get written quotes from licensed contractors
-2. Add up costs for all issues
-3. Decide what you'll accept vs. walk away
-
-**Example Negotiation:**
-• Foundation repair needed: $8,000 quote
-• Roof repairs: $3,500 quote
-• HVAC service: $500 quote
-• Total: $12,000
-
-**Your request might be:**
-• $10,000 price reduction, OR
-• $10,000 credit toward closing costs, OR
-• Combination of both
-
-**Negotiation Tip:**
-Start higher than you expect to get. If you need $10,000, ask for $12,000-$15,000 and negotiate down.`,
-        },
-        {
-          title: 'When to Walk Away',
-          content: `Know your limits before negotiating:
-
-**Consider walking if:**
-• Issues are too expensive relative to home price
-• Problems are of unknown scope
-• Seller won't negotiate reasonably
-• You've lost confidence in the property
-• Deal no longer makes financial sense
-
-**Remember:**
-• You're still in your option period (hopefully)
-• Walking away only costs you the option fee
-• Your earnest money is still safe
-• There WILL be other houses
-
-**Don't let emotion keep you in a bad deal.** If the numbers don't work after inspection, use your option period and move on.`,
-        },
-      ],
-      texasInfo: 'In Texas, your Amendment to Contract must be signed before your option period ends if you want repairs/credits. Don\'t miss this deadline!',
-      redFlag: 'Never accept seller repairs instead of credits. You lose control of quality and contractors often cut corners.',
-      moneyProtection: 'Get contractor quotes to support your negotiation. Sellers are more likely to agree to specific, documented amounts.',
+          <DoAndDont 
+            doItems={[
+              'Ask for money/credits instead of repairs',
+              'Get written quotes from contractors',
+              'Focus on safety and expensive issues',
+              'Be willing to walk away'
+            ]}
+            dontItems={[
+              'Accept seller repairs',
+              'Negotiate over paint color',
+              'Give up on serious issues',
+              'Forget you can still walk away'
+            ]}
+          />
+        </>
+      ),
     },
     {
       id: 6,
-      title: 'Appraisal & Final Loan Approval',
-      subtitle: 'The Last Hurdle Before Closing',
-      icon: Calculator,
+      title: 'The Appraisal',
+      subtitle: 'The bank checks if the house is worth what you\'re paying',
+      icon: FileSearch,
       color: 'indigo',
-      description: 'The appraisal protects you from overpaying. Understand what to do if it comes in low.',
-      keyPoints: [
-        {
-          title: 'How the Appraisal Works',
-          content: `After you're under contract and option period ends:
+      shortDescription: 'The bank sends someone to make sure the house is worth the price.',
+      content: (
+        <>
+          <h4 className="font-bold text-lg text-gray-900 mb-3">What is an Appraisal?</h4>
+          <p className="text-gray-600 mb-4">
+            The bank doesn't trust that the house is worth what you agreed to pay. They send an appraiser (a house value expert) to check. If the house isn't worth the price, the bank won't lend you the full amount.
+          </p>
 
-**The process:**
-1. Lender orders appraisal (you pay for it, ~$450-$600)
-2. Licensed appraiser visits the property
-3. Appraiser researches comparable sales
-4. Appraiser determines market value
-5. Report goes to lender
+          <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-6 mb-6">
+            <h4 className="font-bold text-blue-900 mb-4">Example: What Happens if Appraisal is Low</h4>
+            <div className="space-y-3">
+              <div className="flex justify-between items-center py-2 border-b border-blue-200">
+                <span className="text-blue-800">You agreed to pay:</span>
+                <span className="font-bold text-blue-900">$420,000</span>
+              </div>
+              <div className="flex justify-between items-center py-2 border-b border-blue-200">
+                <span className="text-blue-800">Appraiser says it's worth:</span>
+                <span className="font-bold text-red-600">$400,000</span>
+              </div>
+              <div className="flex justify-between items-center py-2">
+                <span className="text-blue-800">The gap:</span>
+                <span className="font-bold text-red-600">$20,000</span>
+              </div>
+            </div>
+          </div>
 
-**What affects the appraisal:**
-• Recent comparable sales
-• Property condition
-• Location and neighborhood
-• Square footage and features
-• Market conditions
+          <h4 className="font-bold text-lg text-gray-900 mb-3">Your Options if Appraisal is Low</h4>
+          
+          <div className="space-y-3 mb-6">
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <div className="font-semibold text-green-900">Option 1: Seller Lowers Price (BEST!)</div>
+              <div className="text-green-700 text-sm">Ask the seller to drop the price to match the appraisal</div>
+            </div>
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+              <div className="font-semibold text-yellow-900">Option 2: Meet in the Middle</div>
+              <div className="text-yellow-700 text-sm">You pay some extra, seller drops price some</div>
+            </div>
+            <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+              <div className="font-semibold text-orange-900">Option 3: You Pay the Difference (Risky!)</div>
+              <div className="text-orange-700 text-sm">You'd need extra cash AND you'd be paying more than it's worth</div>
+            </div>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="font-semibold text-blue-900">Option 4: Walk Away</div>
+              <div className="text-blue-700 text-sm">If you have an appraisal contingency, you can cancel and get your earnest money back</div>
+            </div>
+          </div>
 
-**You can help by:**
-• Providing list of recent improvements
-• Sharing comparable sales that support value
-• Making sure property is clean and accessible`,
-        },
-        {
-          title: 'If the Appraisal Comes in Low',
-          content: `This is more common than you might think:
-
-**Example:**
-• Purchase price: $420,000
-• Appraised value: $395,000
-• Gap: $25,000
-
-**Your options:**
-
-**1. Renegotiate the price**
-Ask seller to reduce to appraised value. This is the best outcome.
-
-**2. Split the difference**
-You cover some, seller reduces some.
-
-**3. Pay the gap in cash**
-You'd need $25,000 extra PLUS your down payment. Usually not recommended.
-
-**4. Challenge the appraisal**
-Provide additional comparable sales. Success rate is low but possible.
-
-**5. Walk away**
-Use your appraisal contingency. Get earnest money back.
-
-**What if seller won't budge:**
-The appraisal is the market telling you the price is too high. Don't overpay just because you're emotionally attached!`,
-        },
-        {
-          title: 'Final Underwriting & Clear to Close',
-          content: `After appraisal, your loan goes through final review:
-
-**What the underwriter verifies:**
-• Everything you submitted is still accurate
-• No new debts or credit inquiries
-• Employment is still stable
-• Property appraises and is acceptable
-
-**DO NOT do these things before closing:**
-• Buy a car or furniture
-• Open new credit cards
-• Change jobs
-• Make large deposits without documentation
-• Miss any bill payments
-
-**Any of these can KILL your loan!**
-
-**Clear to Close:**
-Once underwriter approves everything, you're "clear to close." This means:
-• Loan is fully approved
-• You can schedule closing
-• Start preparing your funds`,
-        },
-        {
-          title: 'Preparing for Closing',
-          content: `As closing approaches:
-
-**3+ days before closing:**
-• Receive and review Closing Disclosure
-• Compare to original Loan Estimate
-• Question any significant changes
-
-**Day before or morning of:**
-• Final walk-through of property
-• Verify all agreed repairs are done
-• Check that property is in same condition
-• Make sure nothing was damaged or removed
-
-**Closing day:**
-• Bring valid ID (driver's license or passport)
-• Bring certified funds or arrange wire transfer
-• Be prepared to sign many documents
-• Budget 1-2 hours at title company
-
-**Wire fraud warning:**
-Verify wire instructions by CALLING your title company directly. Hackers commonly intercept emails and change wire instructions!`,
-        },
-      ],
-      texasInfo: 'In Texas, closings typically happen at the title company\'s office. You\'ll sign documents with an escrow officer, not an attorney.',
-      redFlag: 'Don\'t waive your appraisal contingency! A low appraisal is the market telling you the price is too high. Use this information.',
-      moneyProtection: 'If the appraisal comes in low, use it as leverage to renegotiate. Overpaying is never worth it just to "get the house."',
+          <TipBox type="warning">
+            <strong>A low appraisal is the market telling you the price is too high!</strong> Don't overpay just because you love the house. There will be other houses.
+          </TipBox>
+        </>
+      ),
     },
     {
       id: 7,
       title: 'Closing Day',
-      subtitle: 'Getting the Keys',
+      subtitle: 'Sign the papers and get your keys!',
       icon: Key,
       color: 'emerald',
-      description: 'The final step! Review everything carefully, sign the documents, and get your keys.',
-      keyPoints: [
-        {
-          title: 'Review Your Closing Disclosure',
-          content: `You must receive this at least 3 business days before closing:
+      shortDescription: 'The final step - review everything, sign, and move in!',
+      content: (
+        <>
+          <h4 className="font-bold text-lg text-gray-900 mb-3">Before Closing Day</h4>
+          
+          <div className="space-y-3 mb-6">
+            <SimpleStep number="1" title="Review the Closing Disclosure" description="You'll get this 3 days before closing. It shows every cost. Compare it to what you were told earlier - any surprises?" />
+            <SimpleStep number="2" title="Do a Final Walk-Through" description="Visit the house one more time. Make sure nothing is damaged and the seller moved out." />
+            <SimpleStep number="3" title="Get Your Money Ready" description="You'll need a wire transfer or cashier's check. NEVER wire money without calling to confirm the account!" />
+          </div>
 
-**Compare to your Loan Estimate - look for:**
-• Interest rate matches
-• Loan amount is correct
-• Monthly payment matches expectations
-• Closing costs match (within tolerance)
-• Seller credits are included
-• Cash to close is what you expected
+          <TipBox type="danger">
+            <strong>WIRE FRAUD WARNING!</strong> Criminals hack emails and send fake wire instructions. ALWAYS call your title company directly (use the number from their website, not from an email) to confirm where to send money.
+          </TipBox>
 
-**Common issues to watch for:**
-• Junk fees that weren't disclosed
-• Higher title fees than quoted
-• Incorrect property tax estimates
-• Missing seller concessions
-• Double-counted fees
+          <h4 className="font-bold text-lg text-gray-900 mb-3">On Closing Day</h4>
+          <p className="text-gray-600 mb-4">
+            You'll go to the title company's office and sign a LOT of papers. Bring:
+          </p>
+          
+          <div className="grid md:grid-cols-2 gap-2 mb-6">
+            {[
+              'Driver\'s license or passport',
+              'Cashier\'s check or wire confirmation',
+              'Proof of insurance',
+              'Anything else your agent told you',
+            ].map((item, i) => (
+              <div key={i} className="flex items-center gap-2 bg-blue-50 rounded-lg p-3">
+                <CheckCircle className="h-5 w-5 text-blue-600" />
+                <span>{item}</span>
+              </div>
+            ))}
+          </div>
 
-**If something is wrong:**
-• Question it immediately
-• Don't close until it's fixed
-• Errors happen - catch them now`,
-        },
-        {
-          title: 'Final Walk-Through',
-          content: `Do this the day before or morning of closing:
+          <h4 className="font-bold text-lg text-gray-900 mb-3">After You Get the Keys</h4>
+          
+          <div className="grid md:grid-cols-2 gap-3 mb-6">
+            <div className="flex items-center gap-2 bg-green-50 rounded-lg p-3">
+              <CheckCircle className="h-5 w-5 text-green-600" />
+              <span className="text-sm"><strong>Change the locks!</strong> You don't know who has keys.</span>
+            </div>
+            <div className="flex items-center gap-2 bg-green-50 rounded-lg p-3">
+              <CheckCircle className="h-5 w-5 text-green-600" />
+              <span className="text-sm">Transfer utilities to your name</span>
+            </div>
+            <div className="flex items-center gap-2 bg-green-50 rounded-lg p-3">
+              <CheckCircle className="h-5 w-5 text-green-600" />
+              <span className="text-sm">Update your address (post office, license)</span>
+            </div>
+            <div className="flex items-center gap-2 bg-green-50 rounded-lg p-3">
+              <CheckCircle className="h-5 w-5 text-green-600" />
+              <span className="text-sm">Find water/gas shutoffs and electrical panel</span>
+            </div>
+          </div>
 
-**Check that:**
-• Property is in same condition as inspection
-• All agreed repairs were completed
-• All items included in sale are present
-• No new damage has occurred
-• Seller has moved out (unless leaseback agreed)
-• All systems work (run water, AC, heat)
-• Garage doors, appliances functional
-• Light fixtures and fans work
+          <TipBox type="texas">
+            <strong>FILE YOUR HOMESTEAD EXEMPTION!</strong> This is super important in Texas! It can save you $1,000+ per year on property taxes. File with your county appraisal district between January 1 and April 30.
+          </TipBox>
 
-**If there are problems:**
-• Document with photos
-• Notify your agent immediately
-• May need to delay closing or hold funds in escrow
-• Don't close on a property with unresolved issues`,
-        },
-        {
-          title: 'At the Closing Table',
-          content: `What to expect:
-
-**What you're signing:**
-• Promissory Note - your promise to repay the loan
-• Deed of Trust - gives lender rights to foreclose
-• Closing Disclosure - final accounting of all costs
-• Various disclosures and affidavits
-• HOA documents if applicable
-
-**Take your time:**
-• Read before you sign
-• Ask questions about anything unclear
-• Don't be rushed
-• This is the biggest financial decision you've made
-
-**What you'll pay:**
-• Down payment (minus earnest money already paid)
-• Closing costs (minus any seller credits)
-• Prepaid items (taxes, insurance, interest)
-
-**How to pay:**
-• Wire transfer (verify instructions by phone!)
-• Cashier's check (made out to title company)`,
-        },
-        {
-          title: 'After Closing',
-          content: `You\'re a homeowner! Now:
-
-**Immediately:**
-• Change the locks (you don't know who has keys)
-• Transfer utilities to your name
-• File change of address with USPS
-• Update your driver's license (Texas requires this)
-
-**First week:**
-• Set up homeowner's insurance payment
-• Locate water/gas shutoffs
-• Locate electrical panel
-• Save all closing documents safely
-
-**Coming up:**
-• First mortgage payment (usually 30-45 days out)
-• Property tax bills (may not be escrowed first year)
-• Homeowner's insurance (may need to pay annual premium)
-
-**Watch for:**
-• Escrow analysis (payment may change after first year)
-• Property tax reassessment (you bought at market value)
-• Homestead exemption (FILE THIS in Texas for tax savings!)`,
-        },
-      ],
-      texasInfo: 'File your Homestead Exemption with your county appraisal district! This can save you $1,000+ per year on property taxes. You can file anytime from January 1 to April 30 for the current tax year.',
-      redFlag: 'Never wire money without calling the title company directly to verify instructions. Wire fraud is extremely common!',
-      moneyProtection: 'Review your Closing Disclosure line by line. Errors happen, and closing day is your last chance to catch them.',
+          <div className="bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl p-6 text-white text-center">
+            <div className="text-3xl mb-2">🎉</div>
+            <div className="text-2xl font-bold">Congratulations!</div>
+            <div className="text-green-100">You're a homeowner!</div>
+          </div>
+        </>
+      ),
     },
   ];
 
@@ -891,173 +809,121 @@ Verify wire instructions by CALLING your title company directly. Hackers commonl
           <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
             <Home className="h-8 w-8 text-blue-600" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Home Buying Phases</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">How to Buy a House</h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            A step-by-step guide through the Texas home buying process, 
-            with focus on protecting your money at each step.
+            A simple, step-by-step guide. Click each step to learn more.
           </p>
           <div className="mt-4 inline-flex items-center bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full text-sm">
             <Star className="h-4 w-4 mr-2" />
-            Texas-specific information included
+            Made for Texas
+          </div>
+        </div>
+
+        {/* Progress Bar */}
+        <div className="mb-8">
+          <div className="flex justify-between mb-2">
+            {phases.map((phase, index) => (
+              <div 
+                key={phase.id}
+                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold cursor-pointer transition-all ${
+                  expandedPhase === phase.id 
+                    ? 'bg-blue-600 text-white scale-110' 
+                    : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                }`}
+                onClick={() => setExpandedPhase(phase.id)}
+              >
+                {index + 1}
+              </div>
+            ))}
+          </div>
+          <div className="h-2 bg-gray-200 rounded-full">
+            <div 
+              className="h-full bg-blue-600 rounded-full transition-all duration-300"
+              style={{ width: `${((expandedPhase + 1) / phases.length) * 100}%` }}
+            />
           </div>
         </div>
 
         {/* Don't Know a Term? */}
         <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 mb-8">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center space-x-3">
-              <div className="bg-purple-100 p-2 rounded-lg">
-                <BookOpen className="h-5 w-5 text-purple-600" />
-              </div>
+              <HelpCircle className="h-6 w-6 text-purple-600" />
               <div>
-                <p className="font-medium text-purple-900">Don't understand a term?</p>
-                <p className="text-purple-700 text-sm">Check our Home Buying Dictionary for plain-English explanations.</p>
+                <p className="font-medium text-purple-900">Don't understand a word?</p>
+                <p className="text-purple-700 text-sm">Check our dictionary for simple explanations.</p>
               </div>
             </div>
             <Link
               to="/dictionary"
               className="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors"
             >
-              Dictionary
+              Open Dictionary
             </Link>
           </div>
         </div>
 
-        {/* Timeline */}
-        <div className="relative">
-          {/* Vertical line */}
-          <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gray-200 hidden md:block"></div>
+        {/* Phases */}
+        <div className="space-y-4">
+          {phases.map((phase, index) => {
+            const Icon = phase.icon;
+            const isExpanded = expandedPhase === phase.id;
 
-          <div className="space-y-6">
-            {phases.map((phase, index) => {
-              const Icon = phase.icon;
-              const isExpanded = expandedPhase === phase.id;
-
-              return (
-                <div key={phase.id} className="relative">
-                  {/* Timeline dot */}
-                  <div className={`absolute left-6 w-5 h-5 rounded-full ${iconColorClasses[phase.color]} border-4 border-white shadow hidden md:block`}></div>
-
-                  <div className={`ml-0 md:ml-16`}>
-                    <div
-                      className={`bg-white rounded-xl shadow-md overflow-hidden border-l-4 ${colorClasses[phase.color].split(' ')[0]} cursor-pointer transition-all duration-200 hover:shadow-lg`}
-                      onClick={() => setExpandedPhase(isExpanded ? -1 : phase.id)}
-                    >
-                      {/* Header */}
-                      <div className="p-6">
-                        <div className="flex items-start justify-between">
-                          <div className="flex items-start space-x-4">
-                            <div className={`${iconColorClasses[phase.color]} p-3 rounded-xl`}>
-                              <Icon className="h-6 w-6 text-white" />
-                            </div>
-                            <div>
-                              <div className="flex items-center space-x-2">
-                                <span className="text-sm font-medium text-gray-500">Step {index + 1}</span>
-                              </div>
-                              <h3 className="text-xl font-bold text-gray-900">{phase.title}</h3>
-                              <p className="text-sm text-gray-500">{phase.subtitle}</p>
-                            </div>
-                          </div>
-                          <button className="text-gray-400 hover:text-gray-600">
-                            {isExpanded ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
-                          </button>
+            return (
+              <div key={phase.id}>
+                <div
+                  className={`bg-white rounded-xl shadow-md overflow-hidden border-l-4 ${colorClasses[phase.color].split(' ')[0]} cursor-pointer transition-all duration-200 hover:shadow-lg`}
+                  onClick={() => setExpandedPhase(isExpanded ? -1 : phase.id)}
+                >
+                  <div className="p-6">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-start space-x-4">
+                        <div className={`${iconColorClasses[phase.color]} p-3 rounded-xl`}>
+                          <Icon className="h-6 w-6 text-white" />
                         </div>
-                        <p className="mt-4 text-gray-600">{phase.description}</p>
+                        <div>
+                          <div className="text-sm font-medium text-gray-500">Step {index + 1}</div>
+                          <h3 className="text-xl font-bold text-gray-900">{phase.title}</h3>
+                          <p className="text-sm text-gray-500">{phase.subtitle}</p>
+                        </div>
                       </div>
-
-                      {/* Expanded Content */}
-                      {isExpanded && (
-                        <div className={`px-6 pb-6 ${colorClasses[phase.color].split(' ')[1]} border-t`}>
-                          {/* Key Points */}
-                          <div className="mt-6 space-y-4">
-                            {phase.keyPoints.map((point, pointIndex) => (
-                              <div key={pointIndex} className="bg-white rounded-lg p-4 shadow-sm">
-                                <h4 className="font-semibold text-gray-900 mb-2">{point.title}</h4>
-                                <div className="text-gray-600 text-sm whitespace-pre-line">
-                                  <FormattedText text={point.content} />
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-
-                          {/* Texas Info */}
-                          {phase.texasInfo && (
-                            <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-                              <div className="flex items-start space-x-3">
-                                <Star className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
-                                <div>
-                                  <h4 className="font-semibold text-blue-800">Texas Note</h4>
-                                  <p className="text-blue-700 text-sm mt-1">{phase.texasInfo}</p>
-                                </div>
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Red Flag */}
-                          <div className="mt-4 bg-red-50 border border-red-200 rounded-lg p-4">
-                            <div className="flex items-start space-x-3">
-                              <AlertTriangle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
-                              <div>
-                                <h4 className="font-semibold text-red-800">Red Flag Warning</h4>
-                                <p className="text-red-700 text-sm mt-1">{phase.redFlag}</p>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Money Protection */}
-                          <div className="mt-4 bg-green-50 border border-green-200 rounded-lg p-4">
-                            <div className="flex items-start space-x-3">
-                              <Shield className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
-                              <div>
-                                <h4 className="font-semibold text-green-800">Money Protection Tip</h4>
-                                <p className="text-green-700 text-sm mt-1">{phase.moneyProtection}</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
+                      <button className="text-gray-400 hover:text-gray-600 ml-4">
+                        {isExpanded ? <ChevronUp className="h-6 w-6" /> : <ChevronDown className="h-6 w-6" />}
+                      </button>
                     </div>
+                    <p className="mt-4 text-gray-600">{phase.shortDescription}</p>
                   </div>
+
+                  {isExpanded && (
+                    <div className={`px-6 pb-6 ${colorClasses[phase.color].split(' ')[1]} border-t`}>
+                      <div className="mt-6">
+                        {phase.content}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              );
-            })}
-          </div>
+              </div>
+            );
+          })}
         </div>
 
         {/* Bottom CTA */}
         <div className="mt-12 bg-blue-600 rounded-xl p-8 text-center text-white">
-          <h3 className="text-2xl font-bold mb-4">Ready to Check Your Readiness?</h3>
+          <h3 className="text-2xl font-bold mb-4">Ready to See if You Can Afford a House?</h3>
           <p className="text-blue-100 mb-6">
-            Before diving into house hunting, make sure you're financially prepared.
+            Use our calculator to find out how much house you can buy.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              to="/financial-readiness"
-              className="inline-flex items-center justify-center bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors duration-200"
-            >
-              <Calculator className="mr-2 h-5 w-5" />
-              Financial Readiness Calculator
-            </Link>
-            <Link
-              to="/dictionary"
-              className="inline-flex items-center justify-center bg-blue-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-400 transition-colors duration-200"
-            >
-              <BookOpen className="mr-2 h-5 w-5" />
-              Learn the Terms
-            </Link>
-          </div>
+          <Link
+            to="/financial-readiness"
+            className="inline-flex items-center justify-center bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors duration-200"
+          >
+            <Calculator className="mr-2 h-5 w-5" />
+            Check What You Can Afford
+          </Link>
         </div>
       </div>
     </div>
   );
 };
-
-// Add BookOpen to imports at top
-const BookOpen = ({ className }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-  </svg>
-);
 
 export default BuyingPhases;
