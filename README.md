@@ -216,15 +216,10 @@ Add-Ons You Can Feed Cursor Later
 - Luxury vs entry-level market differences
 - AI-driven negotiation scripts
 
-WHY THIS IS POWERFUL (REAL TALK)
+WHY THIS IS POWERFUL
 
-Hirva -- this is exactly the kind of AI-native product that:
-- First-time buyers desperately need
-- Realtors will not give away for free
-Could be:
-- A paid Cursor template
-- A web app
-- A Chrome extension on Zillow
-- A "Buyer Safety Score" product
-
-You are basically encoding 10 years of real estate wisdom into a prompt.
+This prompt turns hard-won buyer protection knowledge into a repeatable,
+transparent checklist that helps users:
+- Spot red flags early
+- Ask better questions
+- Make informed, risk-aware decisions
