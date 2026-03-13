@@ -3,9 +3,10 @@ import {
   TrendingUp, Search, AlertCircle, CheckCircle, Loader, ExternalLink,
   DollarSign, Home, BarChart2, ShieldCheck, Lightbulb, ChevronDown, ChevronUp
 } from 'lucide-react';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { useAuth } from '../context/AuthContext';
 
-const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
 const buildPrompt = (zillowUrl, context) => `
 You are an expert real estate buyer's agent and negotiation strategist specializing in the Texas market.
@@ -188,47 +189,24 @@ const Negotiation = () => {
       return;
     }
 
-    if (!OPENAI_API_KEY) {
-      setError('OpenAI API key is not configured. Please add VITE_OPENAI_API_KEY to your environment variables.');
+    if (!GEMINI_API_KEY) {
+      setError('Gemini API key is not configured. Please add VITE_GEMINI_API_KEY to your .env file.');
       return;
     }
 
     setLoading(true);
 
     try {
-      const response = await fetch('https://api.openai.com/v1/responses', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${OPENAI_API_KEY}`,
-        },
-        body: JSON.stringify({
-          model: 'gpt-4o',
-          tools: [{ type: 'web_search_preview' }],
-          input: buildPrompt(zillowUrl, context),
-        }),
+      const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+      const model = genAI.getGenerativeModel({
+        model: 'gemini-2.0-flash',
+        tools: [{ googleSearch: {} }],
       });
 
-      if (!response.ok) {
-        const errData = await response.json().catch(() => ({}));
-        throw new Error(errData?.error?.message || `API error: ${response.status}`);
-      }
+      const result = await model.generateContent(buildPrompt(zillowUrl, context));
+      const text = result.response.text();
 
-      const data = await response.json();
-
-      // Extract text from the response output array
-      let text = '';
-      if (Array.isArray(data.output)) {
-        for (const item of data.output) {
-          if (item.type === 'message' && Array.isArray(item.content)) {
-            for (const c of item.content) {
-              if (c.type === 'output_text') text += c.text;
-            }
-          }
-        }
-      }
-
-      if (!text) throw new Error('No response text received from the API.');
+      if (!text) throw new Error('No response received from Gemini. Please try again.');
 
       setRawText(text);
       const sections = parseResponse(text);
