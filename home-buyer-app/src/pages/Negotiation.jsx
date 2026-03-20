@@ -3,7 +3,6 @@ import {
   TrendingUp, Search, AlertCircle, CheckCircle, Loader, ExternalLink,
   DollarSign, Home, BarChart2, ShieldCheck, Lightbulb, ChevronDown, ChevronUp
 } from 'lucide-react';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import { useAuth } from '../context/AuthContext';
 
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
@@ -197,16 +196,26 @@ const Negotiation = () => {
     setLoading(true);
 
     try {
-      const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-      const model = genAI.getGenerativeModel({
-        model: 'gemini-1.5-flash',
-        tools: [{ googleSearch: {} }],
+      const endpoint = `https://aiplatform.googleapis.com/v1/publishers/google/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ role: 'user', parts: [{ text: buildPrompt(zillowUrl, context) }] }],
+          tools: [{ googleSearch: {} }],
+        }),
       });
 
-      const result = await model.generateContent(buildPrompt(zillowUrl, context));
-      const text = result.response.text();
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData?.error?.message || `API error: ${response.status}`);
+      }
 
-      if (!text) throw new Error('No response received from Gemini. Please try again.');
+      const data = await response.json();
+      const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+      if (!text) throw new Error('No response received. Please try again.');
 
       setRawText(text);
       const sections = parseResponse(text);
