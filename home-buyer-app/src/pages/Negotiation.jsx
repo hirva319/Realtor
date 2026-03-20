@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import {
   TrendingUp, Search, AlertCircle, CheckCircle, Loader, ExternalLink,
-  DollarSign, Home, BarChart2, ShieldCheck, Lightbulb, ChevronDown, ChevronUp
+  DollarSign, Home, BarChart2, ShieldCheck, Lightbulb, ChevronDown, ChevronUp,
+  Bookmark, BookmarkCheck,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useFirestore } from '../hooks/useFirestore';
 
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
@@ -170,12 +172,27 @@ const isValidZillowUrl = (url) => {
 
 const Negotiation = () => {
   const { user } = useAuth();
+  const { saveProperty } = useFirestore();
   const [zillowUrl, setZillowUrl] = useState('');
   const [context, setContext] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
   const [rawText, setRawText] = useState('');
+  const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      await saveProperty({ zillowUrl, strategy: rawText, notes: context });
+      setSaved(true);
+    } catch {
+      setError('Could not save property. Please try again.');
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -333,9 +350,26 @@ const Negotiation = () => {
         {/* Results */}
         {result && result.length > 0 && (
           <div className="space-y-4">
-            <div className="flex items-center space-x-3 mb-2">
-              <CheckCircle className="h-6 w-6 text-green-500" />
-              <h2 className="text-xl font-bold text-gray-900">Your Negotiation Strategy</h2>
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center space-x-3">
+                <CheckCircle className="h-6 w-6 text-green-500" />
+                <h2 className="text-xl font-bold text-gray-900">Your Negotiation Strategy</h2>
+              </div>
+              <button
+                onClick={handleSave}
+                disabled={saved || saving}
+                className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
+                  saved
+                    ? 'bg-green-100 text-green-700 cursor-default'
+                    : 'bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60'
+                }`}
+              >
+                {saved ? (
+                  <><BookmarkCheck className="h-4 w-4" /><span>Saved</span></>
+                ) : (
+                  <><Bookmark className="h-4 w-4" /><span>{saving ? 'Saving...' : 'Save Property'}</span></>
+                )}
+              </button>
             </div>
             <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-800 mb-4">
               <strong>Disclaimer:</strong> This AI-generated strategy is for informational purposes only

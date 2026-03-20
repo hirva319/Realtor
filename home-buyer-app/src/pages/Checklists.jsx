@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { 
   ClipboardList, 
   Check, 
-  Circle,
   DollarSign,
   Search,
   FileText,
@@ -13,13 +12,41 @@ import {
   Key,
   ChevronDown,
   ChevronUp,
-  Download,
-  RefreshCw
+  RefreshCw,
+  Cloud,
+  CloudOff,
 } from 'lucide-react';
+import { useFirestore } from '../hooks/useFirestore';
 
 const Checklists = () => {
   const [expandedChecklist, setExpandedChecklist] = useState(0);
   const [checkedItems, setCheckedItems] = useState({});
+  const [syncStatus, setSyncStatus] = useState('idle'); // idle | saving | saved | error
+  const saveTimer = useRef(null);
+  const { saveChecklistProgress, loadChecklistProgress } = useFirestore();
+
+  // Load saved progress on mount
+  useEffect(() => {
+    loadChecklistProgress().then(saved => {
+      if (saved && Object.keys(saved).length > 0) setCheckedItems(saved);
+    });
+  }, [loadChecklistProgress]);
+
+  // Debounced auto-save whenever checkedItems changes
+  useEffect(() => {
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(async () => {
+      setSyncStatus('saving');
+      try {
+        await saveChecklistProgress(checkedItems);
+        setSyncStatus('saved');
+        setTimeout(() => setSyncStatus('idle'), 2000);
+      } catch {
+        setSyncStatus('error');
+      }
+    }, 1000);
+    return () => clearTimeout(saveTimer.current);
+  }, [checkedItems, saveChecklistProgress]);
 
   const toggleItem = (checklistId, itemId) => {
     const key = `${checklistId}-${itemId}`;
@@ -270,9 +297,26 @@ const Checklists = () => {
           </div>
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Home Buying Checklists</h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Stay organized with comprehensive checklists for every phase. 
+            Stay organized with comprehensive checklists for every phase.
             Check off items as you complete them.
           </p>
+          <div className="mt-3 flex items-center justify-center space-x-2 text-sm">
+            {syncStatus === 'saving' && (
+              <span className="flex items-center space-x-1 text-blue-500">
+                <Cloud className="h-4 w-4 animate-pulse" /><span>Saving...</span>
+              </span>
+            )}
+            {syncStatus === 'saved' && (
+              <span className="flex items-center space-x-1 text-green-600">
+                <Cloud className="h-4 w-4" /><span>Progress saved</span>
+              </span>
+            )}
+            {syncStatus === 'error' && (
+              <span className="flex items-center space-x-1 text-red-500">
+                <CloudOff className="h-4 w-4" /><span>Could not save</span>
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Progress Overview */}
