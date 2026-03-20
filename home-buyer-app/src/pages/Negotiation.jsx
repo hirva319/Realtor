@@ -196,7 +196,7 @@ const Negotiation = () => {
     setLoading(true);
 
     try {
-      const endpoint = `https://aiplatform.googleapis.com/v1/publishers/google/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+      const endpoint = `https://aiplatform.googleapis.com/v1/publishers/google/models/gemini-2.5-flash-lite:generateContent?key=${GEMINI_API_KEY}`;
 
       const response = await fetch(endpoint, {
         method: 'POST',
