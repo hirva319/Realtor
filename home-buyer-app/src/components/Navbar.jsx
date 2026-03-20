@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   Home, Calculator, ClipboardList, AlertTriangle, Menu, X,
-  DollarSign, MapPin, BookOpen, TrendingUp, LogOut, ChevronDown
+  DollarSign, MapPin, BookOpen, TrendingUp, LogOut, ChevronDown, Bookmark
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -22,6 +22,7 @@ const Navbar = () => {
     { path: '/red-flags', label: 'Red Flags', icon: AlertTriangle },
     { path: '/dictionary', label: 'Dictionary', icon: BookOpen },
     { path: '/negotiation', label: 'Negotiation AI', icon: TrendingUp },
+    { path: '/saved-properties', label: 'Saved', icon: Bookmark },
   ];
 
   const isActive = (path) => location.pathname === path;

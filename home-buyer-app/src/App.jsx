@@ -12,6 +12,7 @@ import Checklists from './pages/Checklists';
 import RedFlags from './pages/RedFlags';
 import Dictionary from './pages/Dictionary';
 import Negotiation from './pages/Negotiation';
+import SavedProperties from './pages/SavedProperties';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
               <Route path="/red-flags" element={<ProtectedRoute><RedFlags /></ProtectedRoute>} />
               <Route path="/dictionary" element={<ProtectedRoute><Dictionary /></ProtectedRoute>} />
               <Route path="/negotiation" element={<ProtectedRoute><Negotiation /></ProtectedRoute>} />
+              <Route path="/saved-properties" element={<ProtectedRoute><SavedProperties /></ProtectedRoute>} />
             </Routes>
           </main>
           <Footer />
