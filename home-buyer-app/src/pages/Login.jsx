@@ -28,7 +28,7 @@ const Login = () => {
 
   const benefits = [
     { icon: Shield, text: 'Save your financial readiness progress' },
-    { icon: TrendingUp, text: 'Access AI-powered negotiation strategies' },
+    { icon: TrendingUp, text: 'Understand market dynamics and negotiation leverage' },
     { icon: AlertCircle, text: 'Get personalized home buying guidance' },
     { icon: BookOpen, text: 'Track your checklists across sessions' },
   ];
@@ -53,7 +53,7 @@ const Login = () => {
             Your trusted guide to buying a home in Texas
           </h2>
           <p className="text-gray-600 mb-8">
-            Sign in to unlock all features including AI-powered negotiation strategies,
+            Sign in to unlock all features including educational guides,
             personalized checklists, and financial tools built for Texas buyers.
           </p>
 
