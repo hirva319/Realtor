@@ -27,10 +27,10 @@ const Login = () => {
   };
 
   const benefits = [
-    { icon: Shield, text: 'Back up your financial readiness progress' },
-    { icon: TrendingUp, text: 'Save negotiation strategies to the cloud' },
-    { icon: AlertCircle, text: 'Pick up where you left off on any device' },
-    { icon: BookOpen, text: 'Sync your checklists across sessions' },
+    { icon: Shield, text: 'Save your financial readiness progress' },
+    { icon: TrendingUp, text: 'Understand market dynamics and negotiation leverage' },
+    { icon: AlertCircle, text: 'Get personalized home buying guidance' },
+    { icon: BookOpen, text: 'Track your checklists across sessions' },
   ];
 
   return (
@@ -53,8 +53,8 @@ const Login = () => {
             Your trusted guide to buying a home in Texas
           </h2>
           <p className="text-gray-600 mb-8">
-            You can use every feature without an account. Sign in with Google if you'd like
-            your progress and saved properties backed up and available on other devices.
+            Sign in to unlock all features including educational guides,
+            personalized checklists, and financial tools built for Texas buyers.
           </p>
 
           <ul className="space-y-4">
