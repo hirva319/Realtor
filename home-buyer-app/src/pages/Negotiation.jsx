@@ -4,8 +4,8 @@ import {
   DollarSign, Home, BarChart2, ShieldCheck, Lightbulb, ChevronDown, ChevronUp,
   Bookmark, BookmarkCheck,
 } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
 import { useFirestore } from '../hooks/useFirestore';
+import { useAuth } from '../context/AuthContext';
 
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 

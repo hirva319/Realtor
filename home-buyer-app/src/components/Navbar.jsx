@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   Home, Calculator, ClipboardList, AlertTriangle, Menu, X,
-  DollarSign, MapPin, BookOpen, TrendingUp, LogOut, ChevronDown, Bookmark
+  DollarSign, MapPin, BookOpen, TrendingUp, LogOut, LogIn, ChevronDown, Bookmark
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -31,7 +31,6 @@ const Navbar = () => {
     setUserMenuOpen(false);
     setIsOpen(false);
     await logout();
-    navigate('/login');
   };
 
   return (
@@ -110,7 +109,15 @@ const Navbar = () => {
                   </div>
                 )}
               </div>
-            ) : null}
+            ) : (
+              <button
+                onClick={() => navigate('/login')}
+                className="flex items-center space-x-1 px-3 py-2 rounded-lg text-sm font-medium text-blue-600 hover:bg-blue-50 transition-colors duration-200"
+              >
+                <LogIn className="h-4 w-4" />
+                <span>Sign in</span>
+              </button>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -148,7 +155,7 @@ const Navbar = () => {
               );
             })}
 
-            {user && (
+            {user ? (
               <div className="pt-2 mt-2 border-t border-gray-100">
                 <div className="flex items-center space-x-3 px-3 py-2">
                   {user.photoURL ? (
@@ -177,6 +184,17 @@ const Navbar = () => {
                   <LogOut className="h-5 w-5" />
                   <span>Sign out</span>
                 </button>
+              </div>
+            ) : (
+              <div className="pt-2 mt-2 border-t border-gray-100">
+                <Link
+                  to="/login"
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center space-x-2 px-3 py-2 rounded-lg text-base font-medium text-blue-600 hover:bg-blue-50 transition-colors duration-200"
+                >
+                  <LogIn className="h-5 w-5" />
+                  <span>Sign in</span>
+                </Link>
               </div>
             )}
           </div>

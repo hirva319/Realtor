@@ -12,7 +12,21 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
-const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const googleProvider = new GoogleAuthProvider();
-export const db = getFirestore(app);
+// Sign-in and cloud sync are optional — the rest of the app must keep
+// working (falling back to local storage) even if Firebase isn't configured.
+let auth = null;
+let googleProvider = null;
+let db = null;
+
+if (firebaseConfig.apiKey) {
+  try {
+    const app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    googleProvider = new GoogleAuthProvider();
+    db = getFirestore(app);
+  } catch (err) {
+    console.error('Firebase failed to initialize; continuing without cloud sync.', err);
+  }
+}
+
+export { auth, googleProvider, db };

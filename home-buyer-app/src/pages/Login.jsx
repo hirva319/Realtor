@@ -27,10 +27,10 @@ const Login = () => {
   };
 
   const benefits = [
-    { icon: Shield, text: 'Save your financial readiness progress' },
-    { icon: TrendingUp, text: 'Access AI-powered negotiation strategies' },
-    { icon: AlertCircle, text: 'Get personalized home buying guidance' },
-    { icon: BookOpen, text: 'Track your checklists across sessions' },
+    { icon: Shield, text: 'Back up your financial readiness progress' },
+    { icon: TrendingUp, text: 'Save negotiation strategies to the cloud' },
+    { icon: AlertCircle, text: 'Pick up where you left off on any device' },
+    { icon: BookOpen, text: 'Sync your checklists across sessions' },
   ];
 
   return (
@@ -53,8 +53,8 @@ const Login = () => {
             Your trusted guide to buying a home in Texas
           </h2>
           <p className="text-gray-600 mb-8">
-            Sign in to unlock all features including AI-powered negotiation strategies,
-            personalized checklists, and financial tools built for Texas buyers.
+            You can use every feature without an account. Sign in with Google if you'd like
+            your progress and saved properties backed up and available on other devices.
           </p>
 
           <ul className="space-y-4">
@@ -79,8 +79,8 @@ const Login = () => {
             <span className="font-bold text-xl text-gray-900">HomeBuyer Pro</span>
           </div>
 
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Welcome back</h2>
-          <p className="text-gray-500 mb-8">Sign in to your account to continue</p>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Save your progress</h2>
+          <p className="text-gray-500 mb-8">Signing in is optional — it just syncs your data to the cloud</p>
 
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 mb-6 text-sm">
