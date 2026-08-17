@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   Home, Calculator, ClipboardList, AlertTriangle, Menu, X,
-  DollarSign, MapPin, BookOpen, LogOut, ChevronDown
+  DollarSign, MapPin, BookOpen, LogOut, LogIn, ChevronDown
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
