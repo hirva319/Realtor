@@ -10,6 +10,10 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!auth) {
+      setLoading(false);
+      return;
+    }
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
       setLoading(false);
@@ -17,9 +21,12 @@ export const AuthProvider = ({ children }) => {
     return unsubscribe;
   }, []);
 
-  const loginWithGoogle = () => signInWithPopup(auth, googleProvider);
+  const loginWithGoogle = () => {
+    if (!auth) return Promise.reject(new Error('Sign-in is not configured for this app.'));
+    return signInWithPopup(auth, googleProvider);
+  };
 
-  const logout = () => signOut(auth);
+  const logout = () => (auth ? signOut(auth) : Promise.resolve());
 
   return (
     <AuthContext.Provider value={{ user, loading, loginWithGoogle, logout }}>

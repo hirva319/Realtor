@@ -79,8 +79,8 @@ const Login = () => {
             <span className="font-bold text-xl text-gray-900">HomeBuyer Pro</span>
           </div>
 
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Welcome back</h2>
-          <p className="text-gray-500 mb-8">Sign in to your account to continue</p>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Save your progress</h2>
+          <p className="text-gray-500 mb-8">Signing in is optional — it just syncs your data to the cloud</p>
 
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 mb-6 text-sm">
