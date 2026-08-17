@@ -1,10 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import ProtectedRoute from './components/ProtectedRoute';
 import ScrollToTop from './components/ScrollToTop';
-import Login from './pages/Login';
 import Home from './pages/Home';
 import FinancialReadiness from './pages/FinancialReadiness';
 import BuyingPhases from './pages/BuyingPhases';
@@ -18,30 +15,24 @@ import SavedProperties from './pages/SavedProperties';
 function App() {
   return (
     <Router>
-      <AuthProvider>
-        <div className="min-h-screen bg-gray-50 flex flex-col">
-          <ScrollToTop />
-          <Navbar />
-          <main className="flex-grow">
-            <Routes>
-              {/* Public routes */}
-              <Route path="/login" element={<Login />} />
-
-              {/* Protected routes */}
-              <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-              <Route path="/financial-readiness" element={<ProtectedRoute><FinancialReadiness /></ProtectedRoute>} />
-              <Route path="/buying-phases" element={<ProtectedRoute><BuyingPhases /></ProtectedRoute>} />
-              <Route path="/calculators" element={<ProtectedRoute><Calculators /></ProtectedRoute>} />
-              <Route path="/checklists" element={<ProtectedRoute><Checklists /></ProtectedRoute>} />
-              <Route path="/red-flags" element={<ProtectedRoute><RedFlags /></ProtectedRoute>} />
-              <Route path="/dictionary" element={<ProtectedRoute><Dictionary /></ProtectedRoute>} />
-              <Route path="/negotiation" element={<ProtectedRoute><Negotiation /></ProtectedRoute>} />
-              <Route path="/saved-properties" element={<ProtectedRoute><SavedProperties /></ProtectedRoute>} />
-            </Routes>
-          </main>
-          <Footer />
-        </div>
-      </AuthProvider>
+      <div className="min-h-screen bg-gray-50 flex flex-col">
+        <ScrollToTop />
+        <Navbar />
+        <main className="flex-grow">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/financial-readiness" element={<FinancialReadiness />} />
+            <Route path="/buying-phases" element={<BuyingPhases />} />
+            <Route path="/calculators" element={<Calculators />} />
+            <Route path="/checklists" element={<Checklists />} />
+            <Route path="/red-flags" element={<RedFlags />} />
+            <Route path="/dictionary" element={<Dictionary />} />
+            <Route path="/negotiation" element={<Negotiation />} />
+            <Route path="/saved-properties" element={<SavedProperties />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
     </Router>
   );
 }
