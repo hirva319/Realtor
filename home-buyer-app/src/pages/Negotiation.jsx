@@ -5,6 +5,7 @@ import {
   Bookmark, BookmarkCheck,
 } from 'lucide-react';
 import { useFirestore } from '../hooks/useFirestore';
+import { useAuth } from '../context/AuthContext';
 
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 
@@ -170,6 +171,7 @@ const isValidZillowUrl = (url) => {
 };
 
 const Negotiation = () => {
+  const { user } = useAuth();
   const { saveProperty } = useFirestore();
   const [zillowUrl, setZillowUrl] = useState('');
   const [context, setContext] = useState('');
@@ -257,6 +259,11 @@ const Negotiation = () => {
             Paste a Zillow listing URL and get a data-driven negotiation strategy powered by
             ChatGPT with live web research — tailored for Texas home buyers.
           </p>
+          {user && (
+            <p className="mt-4 text-blue-200 text-sm">
+              Signed in as <span className="font-semibold text-white">{user.displayName || user.email}</span>
+            </p>
+          )}
         </div>
       </div>
 
